@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
@@ -15,5 +16,7 @@ public class Cart {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
    private Integer userId;
-   private List<CartProduct> products; 
+
+   // @OneToMany(mappedBy = "cart")
+   // private List<CartProduct> products; 
 }
