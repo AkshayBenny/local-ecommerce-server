@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 @Service
@@ -39,9 +40,14 @@ public class AmazonS3Service {
     public String getFileUrl(String fileName) {
         try {
             return s3Client.getUrl(bucketName, fileName).toString();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "no image url";
         }
     }
+
+    public void deleteFileById(String fileName) {
+        s3Client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+    }
+
 }
