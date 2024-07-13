@@ -41,15 +41,15 @@ export default function CreateProductAdminPage() {
 				}
 			)
 
-            if (response.status === 200){
-                alert("New product created!")
-                setProductName("")
-                setProductDesc("")
-                setProductPrice(0)
-                setProductCategory("")
-                setProductImage(null)
-            }
-		} catch (error:any) {
+			if (response.status === 200) {
+				alert('New product created!')
+				setProductName('')
+				setProductDesc('')
+				setProductPrice(0)
+				setProductCategory('')
+				setProductImage(null)
+			}
+		} catch (error: any) {
 			console.log(error.message)
 		}
 	}
@@ -103,6 +103,7 @@ export default function CreateProductAdminPage() {
 					<input
 						type='file'
 						onChange={handleFileUpload}
+						
 					/>
 				</div>
 				<button

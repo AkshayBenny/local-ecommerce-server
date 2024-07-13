@@ -22,6 +22,7 @@ public class AdminController {
     @Autowired
     ProductService productService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("order/all")
     public ResponseEntity<String> getAllUsersOrders() {
         return new ResponseEntity<>("All users orders", HttpStatus.OK);
@@ -38,20 +39,21 @@ public class AdminController {
         return productService.createProduct(name, desc, price, category, image);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("product/edit/{id}")
     public ResponseEntity<String> editProductById(
-        @PathVariable Integer id,
-        @RequestParam("productName") String name,
-        @RequestParam("productDescription") String desc,
-        @RequestParam("productPrice") String price,
-        @RequestParam("productCategory") String category,
-        @RequestParam("productImage") MultipartFile image
-    ) {
-        return new ResponseEntity<>("Edit product", HttpStatus.OK);
+            @PathVariable Integer id,
+            @RequestParam("productName") String name,
+            @RequestParam("productDescription") String desc,
+            @RequestParam("productPrice") String price,
+            @RequestParam("productCategory") String category,
+            @RequestParam("productImage") MultipartFile image) {
+        return productService.editProduct(id, name, desc, price, category, image);
     }
-    
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping("product/delete/{id}")
-    public ResponseEntity<String> deleteProductById(String id) {
-        return new ResponseEntity<>("Delete product by id", HttpStatus.OK);
+    public ResponseEntity<String> deleteProductById(@PathVariable Integer id) {
+        return productService.deleteProductById(id);
     }
 }

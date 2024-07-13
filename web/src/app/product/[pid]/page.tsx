@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function ProductPage() {
@@ -23,7 +23,6 @@ export default function ProductPage() {
 		fetchProduct()
 	}, [product])
 
-	console.log(params)
 	return (
 		<div className='space-y-[24px]'>
 			<h1 className='text-3xl font-bold'>{product?.name}</h1>
