@@ -1,4 +1,4 @@
-package com.akshay.localecommerce.dao;
+package com.akshay.localecommerce.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.akshay.localecommerce.model.Product;
 
 @Repository
-public interface ProductDao extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
     
 }
