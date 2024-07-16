@@ -11,7 +11,7 @@ export default function Home() {
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					'http://localhost:8080/product/all',
+					'http://localhost:8080/public/product/all',
 					{
 						headers: {
 							'Content-Type': 'application/json',

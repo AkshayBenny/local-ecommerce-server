@@ -11,13 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.akshay.localecommerce.dao.ProductDao;
 import com.akshay.localecommerce.model.Product;
+import com.akshay.localecommerce.repository.ProductRepository;
 
 @Service
 public class ProductService {
     @Autowired
-    ProductDao productDao;
+    ProductRepository productDao;
     @Autowired
     AmazonS3Service s3Service;
 

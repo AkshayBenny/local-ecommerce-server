@@ -29,7 +29,7 @@ export default function AdminViewAllProductsPage() {
 	const fetchProducts = async () => {
 		try {
 			const response = await axios.get(
-				'http://localhost:8080/product/all'
+				'http://localhost:8080/public/product/all'
 			)
 
 			if (response.status === 200) {
