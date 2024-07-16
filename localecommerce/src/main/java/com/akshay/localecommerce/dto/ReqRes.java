@@ -25,5 +25,4 @@ public class ReqRes {
     private String password;
     private User Users;
     private List<User> usersList;
-
 }
