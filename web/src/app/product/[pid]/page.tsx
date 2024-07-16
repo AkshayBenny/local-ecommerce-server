@@ -1,5 +1,6 @@
 'use client'
 import axios from 'axios'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -11,7 +12,7 @@ export default function ProductPage() {
 		const fetchProduct = async () => {
 			try {
 				const response = await axios.get(
-					`http://localhost:8080/product/find/${params.pid}`
+					`http://localhost:8080/public/product/find/${params.pid}`
 				)
 				if (response.data) {
 					setProduct(response.data)
@@ -25,6 +26,12 @@ export default function ProductPage() {
 
 	return (
 		<div className='space-y-[24px]'>
+			<Image
+				src={product?.image}
+				width={100}
+				height={100}
+				alt={product?.name}
+			/>
 			<h1 className='text-3xl font-bold'>{product?.name}</h1>
 			<p className='text-lg font-normal'>{product?.description}</p>
 			<p className='text-3xl font-light'>{product?.price}</p>
