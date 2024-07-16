@@ -21,6 +21,7 @@ interface LoginData {
 interface AuthContextProps {
 	register: (registerData: RegisterData) => Promise<void>
 	login: (loginData: LoginData) => Promise<void>
+	logout: () => void
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			axiosInstance.defaults.headers.common[
 				'Authorization'
 			] = `Bearer ${token}`
-			// await getUserProfile()
+			await getUserProfile()
 			router.push('/')
 		} catch (error: any) {
 			console.error('Login failed:', error.response?.data)
@@ -77,17 +78,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const logout = () => {
 		try {
-			localStorage.removeItem("token")
-			localStorage.removeItem("refreshToken")
-			router.push("/")
-		} catch (error:any) {
-			console.log("Token deletion failed")
+			localStorage.removeItem('token')
+			localStorage.removeItem('refreshToken')
+			router.push('/login')
+		} catch (error: any) {
+			console.log('Token deletion failed')
 		}
 	}
 
 	const getUserProfile = async () => {
 		try {
 			const response = await axiosInstance.get('/adminuser/get-profile')
+			console.log(response.data)
 			setUser(response.data.users)
 		} catch (error: any) {
 			console.error('Fetching user profile failed:', error.response?.data)
@@ -95,7 +97,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ register, login }}>
+		<AuthContext.Provider value={{ register, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	)

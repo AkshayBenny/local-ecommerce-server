@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../state/authState'
 import Router from 'next/router'
