@@ -80,6 +80,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		try {
 			localStorage.removeItem('token')
 			localStorage.removeItem('refreshToken')
+			setUser(null)
+			setToken(null)
 			router.push('/login')
 		} catch (error: any) {
 			console.log('Token deletion failed')

@@ -1,14 +1,15 @@
 'use client'
 
-import { userState } from '@/state/authState'
+import { tokenState, userState } from '@/state/authState'
 import { useRecoilState } from 'recoil'
 
 export default function UserProfilePage() {
 	const [user, setUser] = useRecoilState(userState)
 	return (
-		<main>
+		<main className='flex flex-col items-center justify-center gap-2'>
 			<p>Profile page</p>
-            <p>{user?.toString()}</p>
+			<p className='text-black'>{user?.email}</p>
+			<p>{user?.name}</p>
 		</main>
 	)
 }
