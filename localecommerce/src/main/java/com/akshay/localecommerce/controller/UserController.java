@@ -17,8 +17,7 @@ import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.service.UserManagementService;
 
 @RestController
-public class UserController
-{
+public class UserController {
     @Autowired
     private UserManagementService userManagementService;
 
