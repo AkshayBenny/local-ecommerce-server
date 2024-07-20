@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.black-btn {
+    @apply bg-black text-white 
+}
+
+.btn-padding {
+    @apply px-4 py-2
+}

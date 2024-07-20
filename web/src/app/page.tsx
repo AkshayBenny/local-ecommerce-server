@@ -28,7 +28,7 @@ export default function Home() {
 		}
 
 		fetchData()
-	}, [products])
+	}, [])
 	return (
 		<main className='w-screen h-screen grid grid-cols-3 gap-10'>
 			{products?.map((product: any) => {

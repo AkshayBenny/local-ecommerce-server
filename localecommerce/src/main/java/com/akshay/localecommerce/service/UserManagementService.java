@@ -16,8 +16,7 @@ import com.akshay.localecommerce.repository.UserRepository;
 import com.akshay.localecommerce.utils.JWTUtils;
 
 @Service
-public class UserManagementService
-{
+public class UserManagementService {
     @Autowired
     public UserRepository userRepo;
 
@@ -30,32 +29,29 @@ public class UserManagementService
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ReqRes register(ReqRes registrationRequest)
-    {
+    public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
 
-        try{
+        try {
             User user = new User();
             user.setEmail(registrationRequest.getEmail());
             user.setRole(registrationRequest.getRole());
             user.setName(registrationRequest.getName());
             user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             User userResult = userRepo.save(user);
-            if (userResult.getId()>0) {
+            if (userResult.getId() > 0) {
                 resp.setUsers((userResult));
                 resp.setMessage("User Saved Successfully");
                 resp.setStatusCode(200);
             }
 
-
-        }catch(Exception e){
+        } catch (Exception e) {
             resp.setStatusCode(500);
             resp.setError(e.getMessage());
         }
 
         return resp;
     }
-
 
     public ReqRes login(ReqRes loginRequest) {
         ReqRes response = new ReqRes();
@@ -79,9 +75,9 @@ public class UserManagementService
         return response;
     }
 
-    public ReqRes refreshToken(ReqRes refreshTokenReqiest){
+    public ReqRes refreshToken(ReqRes refreshTokenReqiest) {
         ReqRes response = new ReqRes();
-        try{
+        try {
             String ourEmail = jwtUtils.extractionUsername(refreshTokenReqiest.getToken());
             User users = userRepo.findByEmail(ourEmail).orElseThrow();
             if (jwtUtils.isTokenValid(refreshTokenReqiest.getToken(), users)) {
@@ -95,13 +91,12 @@ public class UserManagementService
             response.setStatusCode(200);
             return response;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage(e.getMessage());
             return response;
         }
     }
-
 
     public ReqRes getAllUsers() {
         ReqRes reqRes = new ReqRes();
@@ -124,7 +119,6 @@ public class UserManagementService
         }
     }
 
-
     public ReqRes getUsersById(Integer id) {
         ReqRes reqRes = new ReqRes();
         try {
@@ -139,6 +133,10 @@ public class UserManagementService
         return reqRes;
     }
 
+    public User getUserByEmail(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        return user.get();
+    }
 
     public ReqRes deleteUser(Integer userId) {
         ReqRes reqRes = new ReqRes();
@@ -190,8 +188,7 @@ public class UserManagementService
         return reqRes;
     }
 
-
-    public ReqRes getMyInfo(String email){
+    public ReqRes getMyInfo(String email) {
         ReqRes reqRes = new ReqRes();
         try {
             Optional<User> userOptional = userRepo.findByEmail(email);
@@ -204,7 +201,7 @@ public class UserManagementService
                 reqRes.setMessage("User not found for update");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             reqRes.setStatusCode(500);
             reqRes.setMessage("Error occurred while getting user info: " + e.getMessage());
         }

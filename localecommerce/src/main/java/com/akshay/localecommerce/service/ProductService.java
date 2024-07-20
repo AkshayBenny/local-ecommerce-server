@@ -17,7 +17,7 @@ import com.akshay.localecommerce.repository.ProductRepository;
 @Service
 public class ProductService {
     @Autowired
-    ProductRepository productDao;
+    ProductRepository productRepo;
     @Autowired
     AmazonS3Service s3Service;
 
@@ -38,7 +38,7 @@ public class ProductService {
                 return new ResponseEntity<>("Invalid price format", HttpStatus.BAD_REQUEST);
             }
 
-            productDao.save(product);
+            productRepo.save(product);
 
             String imageName = product.getId().toString();
             try {
@@ -56,7 +56,7 @@ public class ProductService {
 
     public ResponseEntity<List<Product>> getAllProducts() {
         try {
-            List<Product> products = productDao.findAll().stream().map(product -> {
+            List<Product> products = productRepo.findAll().stream().map(product -> {
                 Product productWithImageUrl = new Product();
                 productWithImageUrl.setId(product.getId());
                 productWithImageUrl.setName(product.getName());
@@ -76,7 +76,7 @@ public class ProductService {
 
     public ResponseEntity<Product> getProductById(Integer id) {
         try {
-            Optional<Product> product = productDao.findById(id);
+            Optional<Product> product = productRepo.findById(id);
 
             if (product.isPresent()) {
                 Product productWithImageUrl = new Product();
@@ -100,7 +100,7 @@ public class ProductService {
     public ResponseEntity<String> editProduct(
             Integer id, String name, String description, String price, String category, MultipartFile file) {
         try {
-            Optional<Product> productOptional = productDao.findById(id);
+            Optional<Product> productOptional = productRepo.findById(id);
 
             if (productOptional.isPresent()) {
                 Product product = productOptional.get();
@@ -139,7 +139,7 @@ public class ProductService {
                     }
                 }
 
-                productDao.save(product);
+                productRepo.save(product);
                 return new ResponseEntity<>("Product updated", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
@@ -152,10 +152,10 @@ public class ProductService {
 
     public ResponseEntity<String> deleteProductById(Integer id) {
         try {
-            Optional<Product> product = productDao.findById(id);
+            Optional<Product> product = productRepo.findById(id);
 
             if (product.isPresent()) {
-                productDao.deleteById(id);
+                productRepo.deleteById(id);
                 String imageName = product.get().getId().toString();
                 try {
                     s3Service.deleteFileById(imageName);
