@@ -2,8 +2,10 @@
 
 import { cartState } from '@/state/cartState'
 import { Product } from '@/types/product'
+import axiosInstance from '@/utils/axiosInstance'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 
 export default function CartPage() {
@@ -14,6 +16,14 @@ export default function CartPage() {
 			oldCart.filter((product) => product.id !== productId)
 		)
 	}
+
+	useEffect(() => {
+		const fetchCart = async () => {
+			const response = await axiosInstance.get('/cart/get')
+			console.log('FETCHED CART>>>', response.data)
+		}
+		fetchCart()
+	}, [])
 
 	if (cart.length === 0)
 		return (

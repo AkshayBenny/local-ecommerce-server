@@ -2,6 +2,7 @@
 import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
 import { Product } from '@/types/product'
+import axiosInstance from '@/utils/axiosInstance'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,8 +17,17 @@ export default function ProductPage() {
 
 	const params = useParams()
 
-	const addToCartHandler = (product: Product) => {
-		setCart((oldCart: Product[]) => [...oldCart, product])
+	const addToCartHandler = async (pid: String) => {
+		try {
+			const response = await axiosInstance.post(
+				`/cart/add-product/${pid}`
+			)
+			if (response.status === 200) {
+				setCart((oldCart: Product[]) => [...oldCart, product])
+			}
+		} catch (error: any) {
+			console.log(error.message)
+		}
 	}
 
 	useEffect(() => {
@@ -34,7 +44,7 @@ export default function ProductPage() {
 			}
 		}
 		fetchProduct()
-	}, [product])
+	}, [])
 
 	return (
 		<div className='space-y-[24px]'>
@@ -49,7 +59,7 @@ export default function ProductPage() {
 			<p className='text-3xl font-light'>{product?.price}</p>
 			{user ? (
 				<button
-					onClick={() => addToCartHandler(product)}
+					onClick={() => addToCartHandler(product.id)}
 					className='black-btn btn-padding'>
 					Add to cart
 				</button>

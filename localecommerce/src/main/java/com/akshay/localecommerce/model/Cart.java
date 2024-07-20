@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Entity
@@ -18,6 +19,16 @@ public class Cart {
 
     @ManyToMany
     @JoinTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products;
+
+    private List<Product> products = new ArrayList<>();
+
+    public Cart() {
+        this.products = new ArrayList<>();
+    }
+
+    public Cart(User user) {
+        this.user = user;
+        this.products = new ArrayList<>();
+    }
 
 }

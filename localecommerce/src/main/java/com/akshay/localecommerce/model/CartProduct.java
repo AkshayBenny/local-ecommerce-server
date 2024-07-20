@@ -14,7 +14,7 @@ public class CartProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     Integer quantity;
-    
-    // @ManyToOne
-    // Product cartProduct;
+
+    @ManyToOne
+    Product cartProduct;
 }

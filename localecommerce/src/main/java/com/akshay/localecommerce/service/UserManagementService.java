@@ -133,6 +133,11 @@ public class UserManagementService {
         return reqRes;
     }
 
+    public User getUserByEmail(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        return user.get();
+    }
+
     public ReqRes deleteUser(Integer userId) {
         ReqRes reqRes = new ReqRes();
         try {
