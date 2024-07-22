@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -207,5 +209,31 @@ public class UserManagementService {
         }
         return reqRes;
 
+    }
+
+    public ResponseEntity<String> setUserAddress(String userEmail, String city, String street, String buildingName,
+            String postcode, String country) {
+        try {
+            Optional<User> userOptional = userRepo.findByEmail(userEmail);
+
+            if (!userOptional.isPresent()) {
+                return new ResponseEntity<>("user not found", HttpStatus.BAD_REQUEST);
+            }
+
+            User user = userOptional.get();
+            user.setCity(city);
+            user.setStreet(street);
+            user.setBuildingName(buildingName);
+            user.setPostcode(postcode);
+            user.setCountry(country);
+
+            userRepo.save(user);
+
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>("failure", HttpStatus.BAD_REQUEST);
     }
 }

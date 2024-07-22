@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.ArrayList;
 
 @Data
@@ -15,6 +18,7 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToMany

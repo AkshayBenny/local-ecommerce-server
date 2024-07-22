@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,9 +30,15 @@ public class User implements UserDetails {
     private String email;
     private String name;
     private String password;
+    private String city;
+    private String street;
+    private String buildingName;
+    private String postcode;
+    private String country;
     private String role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Cart cart;
 
     @Override

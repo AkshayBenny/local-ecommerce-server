@@ -36,7 +36,6 @@ public class CartService {
             if (userCart == null) {
                 userCart = new Cart();
                 userCart.setUser(user);
-                userCart.setProducts(new ArrayList<>());
             }
 
             Optional<Product> product = productRepo.findById(productId);

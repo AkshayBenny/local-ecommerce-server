@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.akshay.localecommerce.dto.ReqRes;
-import com.akshay.localecommerce.model.Cart;
 import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.service.CartService;
 import com.akshay.localecommerce.service.UserManagementService;
 
 @RestController
-@RequestMapping("cart")
+@RequestMapping("adminuser/cart")
 public class CartController {
     @Autowired
     private CartService cartService;

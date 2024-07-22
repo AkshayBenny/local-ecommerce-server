@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akshay.localecommerce.dto.ReqRes;
@@ -21,6 +22,7 @@ public class UserController {
     @Autowired
     private UserManagementService userManagementService;
 
+    // Auth
     @PostMapping("/auth/register")
     public ResponseEntity<ReqRes> register(@RequestBody ReqRes req) {
         return ResponseEntity.ok(userManagementService.register(req));
@@ -36,6 +38,7 @@ public class UserController {
         return ResponseEntity.ok(userManagementService.refreshToken(req));
     }
 
+    // other
     @GetMapping("/admin/get-all-users")
     public ResponseEntity<ReqRes> getAllUsers() {
         return ResponseEntity.ok(userManagementService.getAllUsers());
@@ -57,6 +60,18 @@ public class UserController {
         String email = authentication.getName();
         ReqRes response = userManagementService.getMyInfo(email);
         return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @PostMapping("/adminuser/set-profile")
+    public ResponseEntity<String> setProfile(
+        @RequestParam("city") String city,
+         @RequestParam("street") String street,
+            @RequestParam("buildingName") String buildingName,
+             @RequestParam("postcode") String postcode,
+            @RequestParam("country") String country) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userManagementService.setUserAddress(email, city, street, buildingName, postcode, country);
     }
 
     @DeleteMapping("/admin/delete/{userId}")
