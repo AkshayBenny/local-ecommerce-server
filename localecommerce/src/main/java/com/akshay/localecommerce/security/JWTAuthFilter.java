@@ -1,4 +1,4 @@
-package com.akshay.localecommerce.config;
+package com.akshay.localecommerce.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.akshay.localecommerce.service.UserService;
-import com.akshay.localecommerce.utils.JWTUtils;
 
 import java.io.IOException;
 

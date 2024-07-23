@@ -1,4 +1,4 @@
-package com.akshay.localecommerce.utils;
+package com.akshay.localecommerce.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

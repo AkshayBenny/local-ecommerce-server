@@ -1,5 +1,7 @@
 package com.akshay.localecommerce.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akshay.localecommerce.dto.ReqRes;
+import com.akshay.localecommerce.dto.UserProfileDTO;
 import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.service.UserManagementService;
 
@@ -62,15 +65,24 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/adminuser/set-profile")
-    public ResponseEntity<String> setProfile(
-        @RequestParam("city") String city,
-         @RequestParam("street") String street,
-            @RequestParam("buildingName") String buildingName,
-             @RequestParam("postcode") String postcode,
-            @RequestParam("country") String country) {
+    @GetMapping("/adminuser/get-user-profile")
+    public ResponseEntity<?> getUserProfileByEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        return userManagementService.getUserProfile(email);
+    }
+
+    @PostMapping("/adminuser/set-profile")
+    public ResponseEntity<String> setProfile(@RequestBody Map<String, String> profileData) {
+        String city = profileData.get("city");
+        String street = profileData.get("street");
+        String buildingName = profileData.get("buildingName");
+        String postcode = profileData.get("postcode");
+        String country = profileData.get("country");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        System.out.printf(city, street);
         return userManagementService.setUserAddress(email, city, street, buildingName, postcode, country);
     }
 

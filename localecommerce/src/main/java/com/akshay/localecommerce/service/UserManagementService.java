@@ -13,9 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.akshay.localecommerce.dto.ReqRes;
+import com.akshay.localecommerce.dto.UserProfileDTO;
 import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.repository.UserRepository;
-import com.akshay.localecommerce.utils.JWTUtils;
+import com.akshay.localecommerce.security.JWTUtils;
+import com.amazonaws.services.opsworks.model.UserProfile;
 
 @Service
 public class UserManagementService {
@@ -235,5 +237,32 @@ public class UserManagementService {
         }
 
         return new ResponseEntity<>("failure", HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<?> getUserProfile(String email) {
+        try {
+            Optional<User> userOptional = userRepo.findByEmail(email);
+
+            if (!userOptional.isPresent()) {
+                return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
+            }
+
+            User user = userOptional.get();
+            UserProfileDTO userProfile = new UserProfileDTO(
+                    user.getEmail(),
+                    user.getName(),
+                    user.getCity(),
+                    user.getStreet(),
+                    user.getBuildingName(),
+                    user.getPostcode(),
+                    user.getCountry());
+
+            System.out.println(userProfile);
+            return new ResponseEntity<>(userProfile, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("failure", HttpStatus.BAD_REQUEST);
+
     }
 }
