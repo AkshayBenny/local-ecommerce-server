@@ -59,6 +59,11 @@ public class CartController {
         return new ResponseEntity<>("Edit cart by id", HttpStatus.OK);
     }
 
+    @DeleteMapping("remove/product/{id}")
+    public ResponseEntity<String> removeCartProduct(@PathVariable String id) {
+        return new ResponseEntity<>("Remove cart product", HttpStatus.OK);
+    }
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteCartById(String id) {
         return new ResponseEntity<>("Delete cart by id", HttpStatus.OK);

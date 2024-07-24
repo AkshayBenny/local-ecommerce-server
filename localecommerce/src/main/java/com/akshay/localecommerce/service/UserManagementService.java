@@ -17,7 +17,6 @@ import com.akshay.localecommerce.dto.UserProfileDTO;
 import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.repository.UserRepository;
 import com.akshay.localecommerce.security.JWTUtils;
-import com.amazonaws.services.opsworks.model.UserProfile;
 
 @Service
 public class UserManagementService {

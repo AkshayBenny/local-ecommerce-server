@@ -82,7 +82,6 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        System.out.printf(city, street);
         return userManagementService.setUserAddress(email, city, street, buildingName, postcode, country);
     }
 
