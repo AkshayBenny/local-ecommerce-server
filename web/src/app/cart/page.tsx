@@ -23,6 +23,14 @@ export default function CartPage() {
 		}
 	}
 
+	const checkoutHandler = async () => {
+		try {
+			await axiosInstance.post('adminuser/order/create')
+		} catch (error: any) {
+			console.log(error.message)
+		}
+	}
+
 	useEffect(() => {
 		const fetchCart = async () => {
 			try {
@@ -86,7 +94,11 @@ export default function CartPage() {
 						)
 					})}
 
-				<button></button>
+				<button
+					className='black-btn btn-padding'
+					onClick={checkoutHandler}>
+					Go to checkout
+				</button>
 			</div>
 		</PrivateRoute>
 	)
