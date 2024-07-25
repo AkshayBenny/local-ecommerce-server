@@ -37,11 +37,11 @@ public class OrderController {
         return orderService.getOrderById(orderId);
     }
 
-    @PostMapping
-    public ResponseEntity<String> createOrder(@RequestBody java.util.List<OrderItemDTO> orderItems) {
+    @PostMapping("/create")
+    public ResponseEntity<String> createOrder() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        return orderService.createOrder(email, orderItems);
+        return orderService.createOrder(email);
     }
 
     @PutMapping("edit/{id}")

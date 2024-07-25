@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 
@@ -21,9 +22,9 @@ public class Cart {
     @JsonBackReference
     private User user;
 
-    @ManyToMany
-    @JoinTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CartItem> products = new ArrayList<>();
 
     public Cart() {
         this.products = new ArrayList<>();
@@ -34,4 +35,11 @@ public class Cart {
         this.products = new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        return "Cart => " +
+                "id=" + id +
+                ", user='" + user + '\'' +
+                ", products='" + products + '\'';
+    }
 }

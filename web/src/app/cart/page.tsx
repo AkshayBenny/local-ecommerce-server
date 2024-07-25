@@ -1,9 +1,8 @@
 'use client'
 
+import PrivateRoute from '@/components/PrivateRoute'
 import { cartState } from '@/state/cartState'
-import { Product } from '@/types/product'
 import axiosInstance from '@/utils/axiosInstance'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
@@ -11,21 +10,32 @@ import { useRecoilState } from 'recoil'
 export default function CartPage() {
 	const [cart, setCart] = useRecoilState(cartState)
 
-	const removeFromCart = (productId: string) => {
-		setCart((oldCart) =>
-			oldCart.filter((product) => product.id !== productId)
-		)
+	const removeFromCart = async (productId: string) => {
+		try {
+			await axiosInstance.delete(
+				`adminuser/cart/remove/product/${productId}`
+			)
+			setCart((oldCart) =>
+				oldCart.filter((product) => product.id !== productId)
+			)
+		} catch (error: any) {
+			console.log('Error removing product:', error?.message)
+		}
 	}
 
 	useEffect(() => {
 		const fetchCart = async () => {
-			const response = await axiosInstance.get('/cart/get')
-			console.log('FETCHED CART>>>', response.data)
+			try {
+				const response = await axiosInstance.get('adminuser/cart/get')
+				setCart(response?.data?.products)
+			} catch (error: any) {
+				console.log(error?.message)
+			}
 		}
 		fetchCart()
 	}, [])
 
-	if (cart.length === 0)
+	if (cart && cart.length === 0)
 		return (
 			<div>
 				Cart currently empty.{' '}
@@ -35,39 +45,49 @@ export default function CartPage() {
 			</div>
 		)
 	return (
-		<div>
-			<h1>Cart Page</h1>
-			{cart.length > 0 &&
-				cart.map((product: Product) => {
-					return (
-						<div className='flex items-center justify-start'>
-							<Image
-								src={product?.image}
-								width={100}
-								height={100}
-								alt={product?.name}
-							/>
-							<div>
-								<h1 className='text-3xl font-bold'>
-									{product?.name}
-								</h1>
-								<p className='text-lg font-normal'>
-									{product?.description}
-								</p>
-								<p className='text-3xl font-light'>
-									{product?.price}
-								</p>
+		<PrivateRoute>
+			<div>
+				<h1>Cart Page</h1>
+				{cart.length > 0 &&
+					cart.map((product: any) => {
+						console.log(product)
+						return (
+							<div className='flex items-center justify-start'>
+								{/* {product?.image && (
+									<Image
+										src={product?.image}
+										width={100}
+										height={100}
+										alt={product?.name}
+									/>
+								)} */}
+								<div>
+									<h1 className='text-3xl font-bold'>
+										{product?.product?.name}
+									</h1>
+									<p className='text-lg font-normal'>
+										{product?.product?.description}
+									</p>
+									<p className='text-3xl font-light'>
+										{product?.product?.price}
+									</p>
+								</div>
+								<p>Quantity: {product?.quantity}</p>
+								<div>
+									<button
+										onClick={() =>
+											removeFromCart(product.product.id)
+										}
+										className='black-btn btn-padding'>
+										Remove
+									</button>
+								</div>
 							</div>
-							<div>
-								<button
-									onClick={() => removeFromCart(product.id)}
-									className='black-btn btn-padding'>
-									Remove
-								</button>
-							</div>
-						</div>
-					)
-				})}
-		</div>
+						)
+					})}
+
+				<button></button>
+			</div>
+		</PrivateRoute>
 	)
 }

@@ -11,10 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.akshay.localecommerce.dto.OrderItemDTO;
+import com.akshay.localecommerce.model.Cart;
 import com.akshay.localecommerce.model.Order;
 import com.akshay.localecommerce.model.OrderItem;
 import com.akshay.localecommerce.model.Product;
 import com.akshay.localecommerce.model.User;
+import com.akshay.localecommerce.repository.CartRepository;
 import com.akshay.localecommerce.repository.OrderItemRepository;
 import com.akshay.localecommerce.repository.OrderRepository;
 import com.akshay.localecommerce.repository.ProductRepository;
@@ -33,6 +35,9 @@ public class OrderService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private CartRepository cartRepo;
 
     public ResponseEntity<?> getAllOrdersByUserEmail(String email) {
         try {
@@ -60,54 +65,66 @@ public class OrderService {
         return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<String> createOrder(String email, List<OrderItemDTO> orderProducts) {
-        Optional<User> userOptional = userRepo.findByEmail(email);
-        if (!userOptional.isPresent()) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
-        
-        List<OrderItem> orderItems = new ArrayList<>();
-        double totalAmount = 0.0;
+    public ResponseEntity<String> createOrder(String email) {
+        // Optional<User> userOptional = userRepo.findByEmail(email);
+        // if (!userOptional.isPresent()) {
+        // return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        // }
+        // User user = userOptional.get();
 
-        for (OrderItemDTO orderProduct : orderProducts) {
-            Integer productId = orderProduct.getProductId();
-            Optional<Product> productOptional = productRepo.findById(productId);
-            if (productOptional.isPresent()) {
-                Product product = productOptional.get();
-                Integer quantity = orderProduct.getQuantity();
+        // Cart userCart = cartRepo.findByUserId(user.getId());
 
-                OrderItem newOrderItem = new OrderItem();
-                newOrderItem.setProduct(product);
-                newOrderItem.setQuantity(quantity);
-                newOrderItem.setOrder(null); // Will set the order later
+        // if (userCart == null) {
+        // return new ResponseEntity<>("user cart not found", HttpStatus.NOT_FOUND);
+        // }
 
-                orderItems.add(newOrderItem);
-                totalAmount += product.getPrice() * quantity;
-            } else {
-                return new ResponseEntity<>("Product not found: " + productId, HttpStatus.BAD_REQUEST);
-            }
-        }
+        // List<Product> userCartProducts = userCart.getProducts();
 
-        try {
-            Order order = new Order();
-            order.setUser(user);
-            order.setOrderDate(LocalDateTime.now());
-            order.setStatus("PENDING");
-            order.setOrderItems(orderItems);
-            order.setTotalAmount(totalAmount);
+        // List<OrderItem> orderItems = new ArrayList<>();
+        // double totalAmount = 0.0;
 
-            orderRepo.save(order);
+        // for (OrderItemDTO orderProduct : orderProducts) {
+        // Integer productId = orderProduct.getProductId();
+        // Optional<Product> productOptional = productRepo.findById(productId);
+        // if (productOptional.isPresent()) {
+        // Product product = productOptional.get();
+        // Integer quantity = orderProduct.getQuantity();
 
-            // Set the order reference in each order item and save them
-            for (OrderItem orderItem : orderItems) {
-                orderItem.setOrder(order);
-                orderItemRepo.save(orderItem);
-            }
+        // OrderItem newOrderItem = new OrderItem();
+        // newOrderItem.setProduct(product);
+        // newOrderItem.setQuantity(quantity);
+        // newOrderItem.setOrder(null); // Will set the order later
 
-            return new ResponseEntity<>("Order created successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Error creating order", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // orderItems.add(newOrderItem);
+        // totalAmount += product.getPrice() * quantity;
+        // } else {
+        // return new ResponseEntity<>("Product not found: " + productId,
+        // HttpStatus.BAD_REQUEST);
+        // }
+        // }
+
+        // try {
+        // Order order = new Order();
+        // order.setUser(user);
+        // order.setOrderDate(LocalDateTime.now());
+        // order.setStatus("PENDING");
+        // order.setOrderItems(orderItems);
+        // order.setTotalAmount(totalAmount);
+
+        // orderRepo.save(order);
+
+        // // Set the order reference in each order item and save them
+        // for (OrderItem orderItem : orderItems) {
+        // orderItem.setOrder(order);
+        // orderItemRepo.save(orderItem);
+        // }
+
+        // return new ResponseEntity<>("Order created successfully", HttpStatus.OK);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // return new ResponseEntity<>("Error creating order",
+        // HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
+        return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
     }
 }

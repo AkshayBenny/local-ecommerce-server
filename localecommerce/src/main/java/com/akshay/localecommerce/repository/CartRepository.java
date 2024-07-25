@@ -6,4 +6,6 @@ import com.akshay.localecommerce.model.Cart;
 
 public interface CartRepository extends JpaRepository<Cart, Integer> {
     Cart findByUserId(Integer userId);
+
+    Cart findByUserEmail(String email);
 }

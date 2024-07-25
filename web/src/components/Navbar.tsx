@@ -3,7 +3,7 @@ import { AuthContext } from '@/context/AuthContext'
 import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
 import Link from 'next/link'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 export default function NavBar() {
@@ -27,11 +27,16 @@ export default function NavBar() {
 					<Link href='/cart'>
 						<div className='relative'>
 							<p className='text-white'>Cart</p>
-							{cart.length > 0 && (
+							{/* {cart.length > 0 && (
 								<p className='absolute top-[-8px] right-[-9px] opacity-60 rounded-full bg-white text-black text-[12px] flex items-center justify-center w-[16px] h-[16px]'>
 									{cart.length > 0 && cart.length}
 								</p>
-							)}
+							)} */}
+						</div>
+					</Link>
+					<Link href='/profile'>
+						<div className='relative'>
+							<p className='text-white'>Profile</p>
 						</div>
 					</Link>
 					<button
@@ -39,6 +44,21 @@ export default function NavBar() {
 						onClick={logoutHandler}>
 						Logout
 					</button>
+				</div>
+			)}
+
+			{!user && (
+				<div className='flex items-center justify-center gap-4'>
+					<Link href='/register'>
+						<div className='relative'>
+							<p className='text-white'>Register</p>
+						</div>
+					</Link>
+					<Link href='/login'>
+						<div className='relative'>
+							<p className='text-white'>Login</p>
+						</div>
+					</Link>
 				</div>
 			)}
 		</nav>

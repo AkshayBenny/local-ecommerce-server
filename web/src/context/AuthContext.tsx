@@ -1,9 +1,9 @@
 'use client'
 import { createContext, useEffect, ReactNode } from 'react'
 import { useRecoilState } from 'recoil'
-import axiosInstance from '../utils/axiosInstance'
 import { useRouter } from 'next/navigation'
 import { userState, tokenState } from '../state/authState'
+import axiosInstance from '@/utils/axiosInstance'
 
 interface RegisterData {
 	name: string
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const register = async (registerData: RegisterData) => {
 		try {
+			removeSavedTokens()
 			const response = await axiosInstance.post(
 				'/auth/register',
 				registerData
@@ -53,13 +54,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			alert(response.data.message || 'Registered successfully!')
 			router.push('/login')
 		} catch (error: any) {
-			console.error('Registration failed:', error.response?.data)
+			console.error('Registration failed:', error?.response?.data)
 			alert('Something went wrong!')
 		}
 	}
 
 	const login = async (loginData: LoginData) => {
 		try {
+			removeSavedTokens()
 			const response = await axiosInstance.post('/auth/login', loginData)
 			const { token, refreshToken } = response.data
 			setToken(token)
@@ -78,8 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const logout = () => {
 		try {
-			localStorage.removeItem('token')
-			localStorage.removeItem('refreshToken')
+			removeSavedTokens()
 			setUser(null)
 			setToken(null)
 			router.push('/login')
@@ -91,11 +92,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const getUserProfile = async () => {
 		try {
 			const response = await axiosInstance.get('/adminuser/get-profile')
-			console.log(response.data)
-			setUser(response.data.users)
+			setUser(response?.data?.users)
 		} catch (error: any) {
 			console.error('Fetching user profile failed:', error.response?.data)
 		}
+	}
+
+	const removeSavedTokens = (): void => {
+		localStorage.removeItem('token')
+		localStorage.removeItem('refreshToken')
+		delete axiosInstance.defaults.headers.common['Authorization']
 	}
 
 	return (

@@ -14,13 +14,14 @@ export default function ProductPage() {
 	const [product, setProduct] = useState<any>({})
 	const [user, setUser] = useRecoilState(userState)
 	const [cart, setCart] = useRecoilState(cartState)
+	const [quantity, setQuantity] = useState(1)
 
 	const params = useParams()
 
 	const addToCartHandler = async (pid: String) => {
 		try {
 			const response = await axiosInstance.post(
-				`/cart/add-product/${pid}`
+				`adminuser/cart/add-product/${pid}/${quantity}`
 			)
 			if (response.status === 200) {
 				setCart((oldCart: Product[]) => [...oldCart, product])
@@ -57,12 +58,22 @@ export default function ProductPage() {
 			<h1 className='text-3xl font-bold'>{product?.name}</h1>
 			<p className='text-lg font-normal'>{product?.description}</p>
 			<p className='text-3xl font-light'>{product?.price}</p>
+
 			{user ? (
-				<button
-					onClick={() => addToCartHandler(product.id)}
-					className='black-btn btn-padding'>
-					Add to cart
-				</button>
+				<div>
+					<input
+						type='number'
+						value={quantity}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setQuantity(Number(e.target.value))
+						}
+					/>
+					<button
+						onClick={() => addToCartHandler(product.id)}
+						className='black-btn btn-padding'>
+						Add to cart
+					</button>
+				</div>
 			) : (
 				<Link
 					href='/login'
