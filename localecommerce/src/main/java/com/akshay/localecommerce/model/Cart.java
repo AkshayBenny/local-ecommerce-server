@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import java.util.ArrayList;
 
 @Data
 @Entity
@@ -33,13 +32,5 @@ public class Cart {
     public Cart(User user) {
         this.user = user;
         this.products = new ArrayList<>();
-    }
-
-    @Override
-    public String toString() {
-        return "Cart => " +
-                "id=" + id +
-                ", user='" + user + '\'' +
-                ", products='" + products + '\'';
     }
 }

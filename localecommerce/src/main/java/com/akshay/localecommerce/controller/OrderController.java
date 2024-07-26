@@ -20,7 +20,7 @@ import com.akshay.localecommerce.service.OrderService;
 import org.springframework.security.core.Authentication;
 
 @RestController
-@RequestMapping("order")
+@RequestMapping("adminuser/order")
 public class OrderController {
     @Autowired
     OrderService orderService;
@@ -44,12 +44,12 @@ public class OrderController {
         return orderService.createOrder(email);
     }
 
-    @PutMapping("edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateUserOrder(String id) {
         return new ResponseEntity<>("Update user order", HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteOrderById(String id) {
         return new ResponseEntity<>("Delete order by id", HttpStatus.OK);
     }
