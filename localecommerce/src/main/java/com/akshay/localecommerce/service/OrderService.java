@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import com.akshay.localecommerce.model.Cart;
 import com.akshay.localecommerce.model.CartItem;
 import com.akshay.localecommerce.model.Order;
+import com.akshay.localecommerce.model.OrderItem;
 import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.repository.CartRepository;
+import com.akshay.localecommerce.repository.OrderItemRepository;
 import com.akshay.localecommerce.repository.OrderRepository;
 import com.akshay.localecommerce.repository.UserRepository;
 
@@ -28,6 +30,9 @@ public class OrderService {
 
     @Autowired
     private CartRepository cartRepo;
+
+    @Autowired
+    private OrderItemRepository orderItemRepo;
 
     public ResponseEntity<?> getAllOrdersByUserEmail(String email) {
         try {
@@ -75,26 +80,30 @@ public class OrderService {
 
             Double totalPrice = 0.0;
             LocalDateTime orderDate = LocalDateTime.now();
-            List<CartItem> orderItems = new ArrayList<>();
+            List<OrderItem> orderItems = new ArrayList<>();
 
             Order newUserOrder = new Order();
             newUserOrder.setUser(user);
             newUserOrder.setOrderDate(orderDate);
             newUserOrder.setStatus("PENDING");
-            newUserOrder.setTotalAmount(totalPrice);
 
-            for (CartItem item : userCartItems) {
-                totalPrice += item.getProduct().getPrice() * item.getQuantity();
+            for (CartItem cartItem : userCartItems) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrder(newUserOrder);
+                orderItem.setProduct(cartItem.getProduct());
+                orderItem.setQuantity(cartItem.getQuantity());
+                orderItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
 
-                item.setOrder(newUserOrder);
-                item.setCart(null);
-                orderItems.add(item); // to avoid shared references error
+                orderItems.add(orderItem);
+
+                totalPrice += orderItem.getPrice();
             }
 
-            newUserOrder.setCartItems(orderItems);
+            newUserOrder.setOrderItems(orderItems);
             newUserOrder.setTotalAmount(totalPrice);
 
             orderRepo.save(newUserOrder);
+            orderItemRepo.saveAll(orderItems);
 
             userCart.getProducts().clear(); // Clear the cart after order is created
             cartRepo.save(userCart);

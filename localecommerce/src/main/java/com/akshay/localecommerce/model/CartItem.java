@@ -24,7 +24,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = true)
-    @JsonBackReference
+    // @JsonBackReference
     private Order order;
 
     @ManyToOne
