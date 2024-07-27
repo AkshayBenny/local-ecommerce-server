@@ -252,7 +252,6 @@ public class UserManagementService {
             }
 
             User user = userOptional.get();
-            List<Order> userOrders = orderRepo.findByUserEmail(email);
 
             UserProfileDTO userProfile = new UserProfileDTO(
                     user.getEmail(),
@@ -261,8 +260,7 @@ public class UserManagementService {
                     user.getStreet(),
                     user.getBuildingName(),
                     user.getPostcode(),
-                    user.getCountry(),
-                    userOrders);
+                    user.getCountry());
 
             return new ResponseEntity<>(userProfile, HttpStatus.OK);
         } catch (Exception e) {

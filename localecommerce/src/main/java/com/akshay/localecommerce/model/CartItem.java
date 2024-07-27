@@ -1,14 +1,8 @@
 package com.akshay.localecommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Data
 @Entity
@@ -19,16 +13,17 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = true)
-    @JsonBackReference
+    @JsonBackReference(value = "cart-cartItem")
     private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = true)
-    // @JsonBackReference
+    @JsonBackReference(value = "order-orderItem")
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference(value = "product-cartItem")
     private Product product;
 
     private Integer quantity = 1;

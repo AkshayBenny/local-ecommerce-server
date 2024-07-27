@@ -1,12 +1,10 @@
 package com.akshay.localecommerce.dto;
 
+import lombok.Data;
 import java.util.List;
-
 import com.akshay.localecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
