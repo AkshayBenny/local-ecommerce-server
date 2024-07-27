@@ -4,10 +4,12 @@ import PrivateRoute from '@/components/PrivateRoute'
 import { cartState } from '@/state/cartState'
 import axiosInstance from '@/utils/axiosInstance'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 
 export default function CartPage() {
+	const router = useRouter()
 	const [cart, setCart] = useRecoilState(cartState)
 
 	const removeFromCart = async (productId: string) => {
@@ -26,6 +28,7 @@ export default function CartPage() {
 	const checkoutHandler = async () => {
 		try {
 			await axiosInstance.post('adminuser/order/create')
+			router.push('/checkout')
 		} catch (error: any) {
 			console.log(error.message)
 		}

@@ -17,7 +17,7 @@ export default function RootLayout({
 			<head>
 				<title>LocalShopper</title>
 			</head>
-			<body className={inter.className}>
+			<body className={inter.className + ' font-poppins text-dark'}>
 				<RecoilRoot>
 					<AuthProvider>
 						<NavBar />
