@@ -1,24 +1,21 @@
-"use client"
+'use client'
 
-import axios from "axios"
-import Image from "next/image"
-import Link from "next/link"
-import { useEffect, useState } from "react"
+import axiosInstance from '@/utils/axiosInstance'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function AdminViewAllProductsPage() {
 	const [products, setProducts] = useState<any>([])
 
 	const productDeleteHandler = async (pid: String) => {
 		try {
-			await axios.delete(
-				`http://localhost:8080/admin/product/delete/${pid}`,
-				{
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json',
-					},
-				}
-			)
+			await axiosInstance.delete(`/admin/product/delete/${pid}`, {
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+			})
 			alert('Product deleted successfully!')
 			fetchProducts()
 		} catch (error: any) {
@@ -28,9 +25,7 @@ export default function AdminViewAllProductsPage() {
 
 	const fetchProducts = async () => {
 		try {
-			const response = await axios.get(
-				'http://localhost:8080/public/product/all'
-			)
+			const response = await axiosInstance.get('/public/product/all')
 
 			if (response.status === 200) {
 				setProducts(response.data)
@@ -62,8 +57,10 @@ export default function AdminViewAllProductsPage() {
 									<p>{product.name}</p>
 									<p>{product.price}</p>
 								</div>
-								<div className="flex items-center justify-center ">
-									<Link href={`/admin/edit/${product.id}`} className='h-full bg-blue-600 text-white px-3 py-2'>
+								<div className='flex items-center justify-center '>
+									<Link
+										href={`/admin/edit/${product.id}`}
+										className='h-full bg-blue-600 text-white px-3 py-2'>
 										Edit
 									</Link>
 									<button

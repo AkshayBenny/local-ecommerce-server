@@ -23,6 +23,9 @@ dependencies:
   recoil:
     specifier: ^0.7.7
     version: 0.7.7(react-dom@18.3.1)(react@18.3.1)
+  remixicon:
+    specifier: ^4.3.0
+    version: 4.3.0
   remixicon-react:
     specifier: ^1.0.0
     version: 1.0.0(react@18.3.1)
@@ -2405,6 +2408,10 @@ packages:
       react: '>=0.14.0'
     dependencies:
       react: 18.3.1
+    dev: false
+
+  /remixicon@4.3.0:
+    resolution: {integrity: sha512-jRYQ37dTFSkJtvcxwTUAkIiXkYRvA9EDvVuXPNrmt2xf/VS//CRgFtsX2TAFBoQOhh9SDh7l6La4Xu12snEyxg==}
     dev: false
 
   /resolve-from@4.0.0:
