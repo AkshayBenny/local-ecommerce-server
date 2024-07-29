@@ -7,9 +7,17 @@
 @tailwind utilities;
 
 
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+
 * {
     @apply font-poppins;
 }
+
 
 .text-dark {
     @apply text-[#1A1A1A]

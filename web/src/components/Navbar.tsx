@@ -4,10 +4,9 @@ import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import LoginRegisterBtn from './LoginRegisterBtn'
+import NavAuthBtn from './NavAuthBtn'
 
 export default function NavBar() {
 	const authContext = useContext(AuthContext)
@@ -16,14 +15,12 @@ export default function NavBar() {
 	const user = useRecoilValue(userState)
 	const [cart, setCart] = useRecoilState(cartState)
 
-	const pathname = usePathname()
-
 	const { logout } = authContext
 
 	const logoutHandler = () => logout()
 
 	return (
-		<div className='text-customGreen'>
+		<div className='text-customGreen fixed top-0 z-10  w-full'>
 			<nav className='w-full  bg-white flex items-center justify-between px-12 py-4'>
 				<Link href={'/'}>
 					<p className='font-bold  text-xl'>LocalShopper</p>
@@ -59,15 +56,7 @@ export default function NavBar() {
 					</div>
 				)}
 
-				{!user && (
-					<div className='flex items-center justify-center gap-4'>
-						{pathname === '/register' ? (
-							<LoginRegisterBtn type='Login' />
-						) : (
-							<LoginRegisterBtn type='Register' />
-						)}
-					</div>
-				)}
+				{!user && <NavAuthBtn />}
 			</nav>
 			<div className='w-full h-[100px] relative'>
 				<Image

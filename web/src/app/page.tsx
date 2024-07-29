@@ -29,8 +29,7 @@ export default function Home() {
 		fetchData()
 	}, [])
 	return (
-		<main className='max-w-screen h-screen'>
-			
+		<main className='max-w-screen h-full'>
 			<div className='grid lg:grid-cols-2 grid-cols-1 gap-10 lg:w-full lg:max-w-[60vw] lg:mx-auto lg:mt-12'>
 				{products?.map((product: any) => {
 					return (
@@ -38,7 +37,7 @@ export default function Home() {
 							pid={product?.id}
 							image={product?.image}
 							name={product?.name}
-							desc={product?.description}
+							cat={product?.category}
 							price={product?.price}
 						/>
 					)

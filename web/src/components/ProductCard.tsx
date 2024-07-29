@@ -9,13 +9,13 @@ export default function ProductCard({
 	pid,
 	image,
 	name,
-	desc,
+	cat,
 	price,
 }: {
 	pid: string
 	image: string
 	name: string
-	desc: string
+	cat: string
 	price: string
 }) {
 	return (
@@ -42,9 +42,7 @@ export default function ProductCard({
 						</div>
 						<div className='flex gap-[4px] justify-start items-center'>
 							<PriceTag3LineIcon className='w-[16px] h-[16px]' />
-							<p className='font-light text-[14px]'>
-								Organic, fruits
-							</p>
+							<p className='font-light text-[14px]'>{cat}</p>
 						</div>
 					</div>
 					<div className='flex justify-between items-end'>
