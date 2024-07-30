@@ -1,9 +1,10 @@
 'use client'
 
-import axios from "axios"
-import Image from "next/image"
-import { useParams } from "next/navigation"
-import { ChangeEvent, useEffect, useState } from "react"
+import axiosInstance from '@/utils/axiosInstance'
+import axios from 'axios'
+import Image from 'next/image'
+import { useParams } from 'next/navigation'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function AdminEditProductPage() {
 	const [product, setProduct] = useState<any>({})
@@ -23,8 +24,8 @@ export default function AdminEditProductPage() {
 		}
 
 		try {
-			const response = await axios.put(
-				`http://localhost:8080/admin/product/edit/${params.pid}`,
+			const response = await axiosInstance.put(
+				`/admin/product/edit/${params.pid}`,
 				formData,
 				{
 					headers: {
@@ -56,8 +57,8 @@ export default function AdminEditProductPage() {
 		const fetchProduct = async () => {
 			setLoading(true)
 			try {
-				const response = await axios.get(
-					`http://localhost:8080/product/find/${params.pid}`
+				const response = await axiosInstance.get(
+					`/product/find/${params.pid}`
 				)
 				if (response.data) {
 					setProduct(response.data)
@@ -73,10 +74,11 @@ export default function AdminEditProductPage() {
 	if (loading) {
 		return <div>Loading...</div>
 	}
-console.log(product)
 	return (
 		<div>
-			<form onSubmit={productUpdateHandler} className="flex flex-col items-center justify-center gap-3">
+			<form
+				onSubmit={productUpdateHandler}
+				className='flex flex-col items-center justify-center gap-3'>
 				<input
 					name='name'
 					onChange={handleInputChange}
@@ -112,8 +114,12 @@ console.log(product)
 						height={100}
 					/>
 				)}
-				<input type="file" placeholder="New image" onChange={handleFileUpload} />
-				<button type="submit">Update</button>
+				<input
+					type='file'
+					placeholder='New image'
+					onChange={handleFileUpload}
+				/>
+				<button type='submit'>Update</button>
 			</form>
 		</div>
 	)

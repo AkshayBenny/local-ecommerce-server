@@ -2,10 +2,8 @@ package com.akshay.localecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.List;
 import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -18,11 +16,11 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonBackReference(value = "user-cart")
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "cart-cartItem")
     private List<CartItem> products = new ArrayList<>();
 
     public Cart() {

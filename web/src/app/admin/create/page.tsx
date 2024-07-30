@@ -1,5 +1,6 @@
 'use client'
 
+import axiosInstance from '@/utils/axiosInstance'
 import axios from 'axios'
 import { ChangeEvent, FormEvent, useState } from 'react'
 
@@ -31,8 +32,8 @@ export default function CreateProductAdminPage() {
 		}
 
 		try {
-			const response = await axios.post(
-				'http://localhost:8080/admin/product/new',
+			const response = await axiosInstance.post(
+				'/admin/product/new',
 				formData,
 				{
 					headers: {
@@ -103,7 +104,6 @@ export default function CreateProductAdminPage() {
 					<input
 						type='file'
 						onChange={handleFileUpload}
-						
 					/>
 				</div>
 				<button

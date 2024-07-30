@@ -2,9 +2,11 @@
 import { AuthContext } from '@/context/AuthContext'
 import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
+import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import NavAuthBtn from './NavAuthBtn'
 
 export default function NavBar() {
 	const authContext = useContext(AuthContext)
@@ -18,49 +20,52 @@ export default function NavBar() {
 	const logoutHandler = () => logout()
 
 	return (
-		<nav className='w-full  bg-black flex items-center justify-between px-12 py-4'>
-			<Link href={'/'}>
-				<p className='font-bold text-white text-xl'>LocalShopper</p>
-			</Link>
-			{user && (
-				<div className='flex items-center justify-center gap-4'>
-					<Link href='/cart'>
-						<div className='relative'>
-							<p className='text-white'>Cart</p>
-							{/* {cart.length > 0 && (
+		<div className='text-customGreen fixed top-0 z-10  w-full'>
+			<nav className='w-full  bg-white flex items-center justify-between px-12 py-4'>
+				<Link href={'/'}>
+					<p className='font-bold  text-xl'>LocalShopper</p>
+				</Link>
+				<div>
+					<input
+						type='text'
+						placeholder='Search...'
+					/>
+				</div>
+				{user && (
+					<div className='flex items-center justify-center gap-4'>
+						<Link href='/cart'>
+							<div className='relative'>
+								<p className=''>Cart</p>
+								{/* {cart.length > 0 && (
 								<p className='absolute top-[-8px] right-[-9px] opacity-60 rounded-full bg-white text-black text-[12px] flex items-center justify-center w-[16px] h-[16px]'>
 									{cart.length > 0 && cart.length}
 								</p>
 							)} */}
-						</div>
-					</Link>
-					<Link href='/profile'>
-						<div className='relative'>
-							<p className='text-white'>Profile</p>
-						</div>
-					</Link>
-					<button
-						className='bg-white text-black rounded-full px-4 py-2'
-						onClick={logoutHandler}>
-						Logout
-					</button>
-				</div>
-			)}
+							</div>
+						</Link>
+						<Link href='/profile'>
+							<div className='relative'>
+								<p className=''>Profile</p>
+							</div>
+						</Link>
+						<button
+							className='bg-white rounded-full px-4 py-2'
+							onClick={logoutHandler}>
+							Logout
+						</button>
+					</div>
+				)}
 
-			{!user && (
-				<div className='flex items-center justify-center gap-4'>
-					<Link href='/register'>
-						<div className='relative'>
-							<p className='text-white'>Register</p>
-						</div>
-					</Link>
-					<Link href='/login'>
-						<div className='relative'>
-							<p className='text-white'>Login</p>
-						</div>
-					</Link>
-				</div>
-			)}
-		</nav>
+				{!user && <NavAuthBtn />}
+			</nav>
+			<div className='w-full h-[100px] relative'>
+				<Image
+					src='/navbar.jpg'
+					alt='Breadcrumb background'
+					layout='fill'
+					objectFit='cover'
+				/>
+			</div>
+		</div>
 	)
 }

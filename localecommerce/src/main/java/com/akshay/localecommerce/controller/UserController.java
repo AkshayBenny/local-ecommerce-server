@@ -67,6 +67,7 @@ public class UserController {
     public ResponseEntity<?> getUserProfileByEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        
         return userManagementService.getUserProfile(email);
     }
 

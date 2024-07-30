@@ -3,14 +3,15 @@
 import { useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../state/authState'
-import Router from 'next/router'
+import { useRouter } from 'next/navigation'
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 	const user = useRecoilValue(userState)
+	const router = useRouter()
 
 	useEffect(() => {
 		if (!user) {
-			Router.push('/login')
+			router.push('/login')
 		}
 	}, [user])
 

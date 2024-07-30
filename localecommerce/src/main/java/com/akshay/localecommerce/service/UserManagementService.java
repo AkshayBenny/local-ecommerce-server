@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.akshay.localecommerce.dto.ReqRes;
 import com.akshay.localecommerce.dto.UserProfileDTO;
+import com.akshay.localecommerce.model.Order;
 import com.akshay.localecommerce.model.User;
+import com.akshay.localecommerce.repository.OrderRepository;
 import com.akshay.localecommerce.repository.UserRepository;
 import com.akshay.localecommerce.security.JWTUtils;
 
@@ -31,6 +33,9 @@ public class UserManagementService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private OrderRepository orderRepo;
 
     public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
@@ -247,6 +252,7 @@ public class UserManagementService {
             }
 
             User user = userOptional.get();
+
             UserProfileDTO userProfile = new UserProfileDTO(
                     user.getEmail(),
                     user.getName(),
@@ -254,14 +260,13 @@ public class UserManagementService {
                     user.getStreet(),
                     user.getBuildingName(),
                     user.getPostcode(),
-                    user.getCountry());
+                    user.getCountry(),
+                    user.getOrders());
 
-            System.out.println(userProfile);
             return new ResponseEntity<>(userProfile, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new ResponseEntity<>("failure", HttpStatus.BAD_REQUEST);
-
     }
 }

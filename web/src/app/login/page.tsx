@@ -1,5 +1,6 @@
 'use client'
 import { AuthContext } from '@/context/AuthContext'
+import Link from 'next/link'
 import React, { useContext, useState } from 'react'
 
 export default function LoginPage() {
@@ -24,25 +25,44 @@ export default function LoginPage() {
 	}
 
 	return (
-		<main>
-			<form onSubmit={loginHandler}>
-				<input
-					type='text'
-					placeholder='Email'
-					name='email'
-					value={formData.email}
-					onChange={handleInputChange}
-					required
-				/>
-				<input
-					type='text'
-					placeholder='Password'
-					name='password'
-					value={formData.password}
-					onChange={handleInputChange}
-					required
-				/>
-				<button type='submit'>Login</button>
+		<main className='flex items-center justify-center min-h-[85vh] w-full'>
+			<form
+				onSubmit={loginHandler}
+				className='flex flex-col items-center justify-center h-full gap-[20px] border border-customVeryLightBlack lg:p-[24px] rounded-md'>
+				<h1 className='font-semibold text-[32px] leading-[120%] opacity-90'>
+					Login
+				</h1>
+				<div className='flex flex-col gap-[12px]'>
+					<input
+						type='text'
+						placeholder='Email'
+						name='email'
+						value={formData.email}
+						onChange={handleInputChange}
+						required
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-full'
+					/>
+					<input
+						type='text'
+						placeholder='Password'
+						name='password'
+						value={formData.password}
+						onChange={handleInputChange}
+						required
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-full'
+					/>
+				</div>
+				<button
+					type='submit'
+					className='w-full bg-customGreen py-[14px] rounded-full text-white'>
+					Login
+				</button>
+				<p className='text-light'>
+					Don't have an account?{' '}
+					<span className='text-dark font-medium hover:text-customGreen transition hover:underline'>
+						<Link href='/register'>Register</Link>
+					</span>
+				</p>
 			</form>
 		</main>
 	)

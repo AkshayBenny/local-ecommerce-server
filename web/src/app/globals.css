@@ -1,11 +1,66 @@
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/700.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+
+* {
+    @apply font-poppins;
+}
+
+
+.text-dark {
+    @apply text-[#1A1A1A]
+}
+
+.text-light {
+    @apply text-[#666666]
+}
+
+.text-x-light {
+    @apply text-[#999999]
+}
+
 .black-btn {
-    @apply bg-black text-white 
+    @apply bg-black text-white
 }
 
 .btn-padding {
     @apply px-4 py-2
+}
+
+/* scrollbar config */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #00B207;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
