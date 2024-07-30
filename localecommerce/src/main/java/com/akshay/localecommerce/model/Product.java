@@ -26,4 +26,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "product-orderItem")
     private List<OrderItem> orderItems = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "product-comment")
+    private List<Comment> comments = new ArrayList<>();
 }

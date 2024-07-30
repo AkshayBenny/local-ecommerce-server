@@ -260,7 +260,8 @@ public class UserManagementService {
                     user.getStreet(),
                     user.getBuildingName(),
                     user.getPostcode(),
-                    user.getCountry());
+                    user.getCountry(),
+                    user.getOrders());
 
             return new ResponseEntity<>(userProfile, HttpStatus.OK);
         } catch (Exception e) {
