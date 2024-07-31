@@ -1,4 +1,5 @@
 'use client'
+
 import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
 import { Product } from '@/types/product'
@@ -19,6 +20,7 @@ export default function ProductPage() {
 	const [user, setUser] = useRecoilState(userState)
 	const [cart, setCart] = useRecoilState(cartState)
 	const [quantity, setQuantity] = useState(1)
+	const [newComment, setNewComment] = useState('')
 
 	const params = useParams()
 
@@ -30,6 +32,32 @@ export default function ProductPage() {
 			if (response.status === 200) {
 				setCart((oldCart: Product[]) => [...oldCart, product])
 			}
+		} catch (error: any) {
+			console.log(error.message)
+		}
+	}
+
+	const addCommentHandler = async (e: any) => {
+		e.preventDefault()
+		if (product.id) {
+			try {
+				await axiosInstance.post(`/adminuser/comment/add-comment`, {
+					pid: params.pid,
+					comment: newComment,
+				})
+			} catch (error: any) {
+				console.log(error.message)
+			}
+		}
+	}
+
+	const getCommentHandler = async (e: any) => {
+		try {
+			const response = await axiosInstance.get(
+				`/public/comment/get-comment/${params.pid}`
+			)
+
+			console.log('Comments: ', response.data)
 		} catch (error: any) {
 			console.log(error.message)
 		}
@@ -49,6 +77,7 @@ export default function ProductPage() {
 			}
 		}
 		fetchProduct()
+		getCommentHandler()
 	}, [])
 
 	return (
@@ -121,6 +150,14 @@ export default function ProductPage() {
 							className='w-full bg-customGreen py-[14px] rounded-full text-white'>
 							Add to cart
 						</button>
+						<form onSubmit={addCommentHandler}>
+							<input
+								type='text'
+								value={newComment}
+								onChange={(e) => setNewComment(e.target.value)}
+							/>
+							<button type='submit'>Add comment</button>
+						</form>
 					</div>
 				) : (
 					<Link
