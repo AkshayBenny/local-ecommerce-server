@@ -14,13 +14,13 @@ import Chat2LineIcon from 'remixicon-react/Chat2LineIcon'
 import PriceTag3LineIcon from 'remixicon-react/PriceTag3LineIcon'
 import AddLineIcon from 'remixicon-react/AddLineIcon'
 import SubtractLineIcon from 'remixicon-react/SubtractLineIcon'
+import Comment from '@/components/Comment'
 
 export default function ProductPage() {
 	const [product, setProduct] = useState<any>({})
 	const [user, setUser] = useRecoilState(userState)
 	const [cart, setCart] = useRecoilState(cartState)
 	const [quantity, setQuantity] = useState(1)
-	const [newComment, setNewComment] = useState('')
 
 	const params = useParams()
 
@@ -37,31 +37,7 @@ export default function ProductPage() {
 		}
 	}
 
-	const addCommentHandler = async (e: any) => {
-		e.preventDefault()
-		if (product.id) {
-			try {
-				await axiosInstance.post(`/adminuser/comment/add-comment`, {
-					pid: params.pid,
-					comment: newComment,
-				})
-			} catch (error: any) {
-				console.log(error.message)
-			}
-		}
-	}
-
-	const getCommentHandler = async (e: any) => {
-		try {
-			const response = await axiosInstance.get(
-				`/public/comment/get-comment/${params.pid}`
-			)
-
-			console.log('Comments: ', response.data)
-		} catch (error: any) {
-			console.log(error.message)
-		}
-	}
+	
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -77,7 +53,6 @@ export default function ProductPage() {
 			}
 		}
 		fetchProduct()
-		getCommentHandler()
 	}, [])
 
 	return (
@@ -150,14 +125,6 @@ export default function ProductPage() {
 							className='w-full bg-customGreen py-[14px] rounded-full text-white'>
 							Add to cart
 						</button>
-						<form onSubmit={addCommentHandler}>
-							<input
-								type='text'
-								value={newComment}
-								onChange={(e) => setNewComment(e.target.value)}
-							/>
-							<button type='submit'>Add comment</button>
-						</form>
 					</div>
 				) : (
 					<Link
@@ -168,6 +135,8 @@ export default function ProductPage() {
 						</button>
 					</Link>
 				)}
+
+				<Comment pid={Number(params.pid)} />
 			</div>
 		</main>
 	)
