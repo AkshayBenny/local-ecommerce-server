@@ -1,5 +1,6 @@
 'use client'
 
+import { capitalizeWords } from '@/utils/capitalizeWords'
 import Image from 'next/image'
 import Link from 'next/link'
 import ArrowRightLineIcon from 'remixicon-react/ArrowRightLineIcon'
@@ -42,7 +43,9 @@ export default function ProductCard({
 						</div>
 						<div className='flex gap-[4px] justify-start items-center'>
 							<PriceTag3LineIcon className='w-[16px] h-[16px]' />
-							<p className='font-light text-[14px]'>{cat}</p>
+							<p className='font-light text-[14px]'>
+								{capitalizeWords(cat)}
+							</p>
 						</div>
 					</div>
 					<div className='flex justify-between items-end'>
@@ -56,7 +59,7 @@ export default function ProductCard({
 								<span>
 									<ArrowRightLineIcon className='w-[24px] h-[20px]' />
 								</span>
-							</div>
+						</div>
 						</div>
 						<p className='text-2xl font-thin opacity-80'>
 							£{price}

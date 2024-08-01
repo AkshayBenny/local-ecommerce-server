@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 import { userState, tokenState } from '../state/authState'
 import axiosInstance from '@/utils/axiosInstance'
+import { cartState } from '@/state/cartState'
 
 interface RegisterData {
 	name: string
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const router = useRouter()
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState)
+	const [cart, setCart] = useRecoilState(cartState)
 
 	useEffect(() => {
 		const savedToken = localStorage.getItem('token')
@@ -72,6 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				'Authorization'
 			] = `Bearer ${token}`
 			await getUserProfile()
+			await fetchCart()
 			router.push('/')
 		} catch (error: any) {
 			console.error('Login failed:', error.response?.data)
@@ -96,6 +99,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			setUser(response?.data?.users)
 		} catch (error: any) {
 			console.error('Fetching user profile failed:', error.response?.data)
+		}
+	}
+
+	const fetchCart = async () => {
+		try {
+			const response = await axiosInstance.get('adminuser/cart/get')
+			setCart(response?.data?.products)
+		} catch (error: any) {
+			console.log(error?.message)
 		}
 	}
 

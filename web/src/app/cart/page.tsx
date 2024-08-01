@@ -11,7 +11,6 @@ import { useRecoilState } from 'recoil'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
 
 export default function CartPage() {
-	const router = useRouter()
 	const [cart, setCart] = useRecoilState(cartState)
 
 	const removeFromCart = async (productId: string) => {
@@ -24,15 +23,6 @@ export default function CartPage() {
 			)
 		} catch (error: any) {
 			console.log('Error removing product:', error?.message)
-		}
-	}
-
-	const checkoutHandler = async () => {
-		try {
-			await axiosInstance.post('adminuser/order/create')
-			router.push('/checkout')
-		} catch (error: any) {
-			console.log(error.message)
 		}
 	}
 
@@ -65,7 +55,7 @@ export default function CartPage() {
 		<PrivateRoute>
 			<main className='max-w-screen min-h-screen mb-12'>
 				<div className='lg:max-w-[60vw] lg:mx-auto lg:mt-12'>
-					<h1 className='text-[32px] text-[#1A1A1A] font-semibold text-center mb-[32px]'>
+					<h1 className='text-[32px] text-[#1A1A1A] font-medium text-center mb-[32px]'>
 						My Cart
 					</h1>
 					{cart.length > 0 && (
@@ -172,11 +162,11 @@ export default function CartPage() {
 						</table>
 					)}
 					<div className='flex justify-end mt-4'>
-						<button
-							className='black-btn btn-padding'
-							onClick={checkoutHandler}>
-							Go to checkout
-						</button>
+						<Link href='/checkout'>
+							<button className='w-full bg-customGreen py-[14px] rounded-full text-white px-12'>
+								Go to checkout
+							</button>
+						</Link>
 					</div>
 				</div>
 			</main>

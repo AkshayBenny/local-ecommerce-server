@@ -8,13 +8,14 @@ import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { MouseEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Chat2LineIcon from 'remixicon-react/Chat2LineIcon'
 import PriceTag3LineIcon from 'remixicon-react/PriceTag3LineIcon'
 import AddLineIcon from 'remixicon-react/AddLineIcon'
 import SubtractLineIcon from 'remixicon-react/SubtractLineIcon'
 import Comment from '@/components/Comment'
+import { capitalizeWords } from '@/utils/capitalizeWords'
 
 export default function ProductPage() {
 	const [product, setProduct] = useState<any>({})
@@ -36,8 +37,6 @@ export default function ProductPage() {
 			console.log(error.message)
 		}
 	}
-
-	
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -77,7 +76,8 @@ export default function ProductPage() {
 					<div className='flex gap-[4px] justify-start items-center'>
 						<PriceTag3LineIcon className='w-[16px] h-[16px] text-customGreen' />
 						<p className='font-light text-[14px] opacity-60'>
-							{product?.category}
+							{product?.category &&
+								capitalizeWords(product?.category)}
 						</p>
 					</div>
 				</div>
