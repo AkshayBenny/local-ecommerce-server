@@ -96,13 +96,13 @@ export default function ProductPage() {
 
 				{user ? (
 					<div className='flex gap-3 items-center justify-center mt-12'>
-						<div className='flex items-center justify-center gap-4 border border-customVeryLightBlack p-2 rounded-full h-[64px]'>
+						<div className='flex items-center justify-center gap-4 border border-customVeryLightBlack px-2 rounded-full h-[54px]'>
 							<button
 								onClick={(e) => {
 									setQuantity(quantity + 1)
 								}}
-								className='bg-customGreen rounded-full p-3'>
-								<AddLineIcon className='h-[16px] w-[16px] text-white' />
+								className='bg-[#F2F2F2] rounded-full p-3'>
+								<AddLineIcon className='h-[16px] w-[16px] text-[#1A1A1A]' />
 							</button>
 							<input
 								type='number'
@@ -116,8 +116,8 @@ export default function ProductPage() {
 								onClick={(e) => {
 									quantity > 1 && setQuantity(quantity - 1)
 								}}
-								className='bg-customGreen rounded-full p-3'>
-								<SubtractLineIcon className='h-[16px] w-[16px] text-white' />
+								className='bg-[#F2F2F2] rounded-full p-3'>
+								<SubtractLineIcon className='h-[16px] w-[16px] text-[#1A1A1A]' />
 							</button>
 						</div>
 						<button

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { userState, tokenState } from '../state/authState'
 import axiosInstance from '@/utils/axiosInstance'
 import { cartState } from '@/state/cartState'
+import { fetchCart } from '@/utils/fetchCart'
 
 interface RegisterData {
 	name: string
@@ -74,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				'Authorization'
 			] = `Bearer ${token}`
 			await getUserProfile()
-			await fetchCart()
+			await fetchCart(setCart)
 			router.push('/')
 		} catch (error: any) {
 			console.error('Login failed:', error.response?.data)
@@ -102,15 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}
 
-	const fetchCart = async () => {
-		try {
-			const response = await axiosInstance.get('adminuser/cart/get')
-			setCart(response?.data?.products)
-		} catch (error: any) {
-			console.log(error?.message)
-		}
-	}
-
+	
 	const removeSavedTokens = (): void => {
 		localStorage.removeItem('token')
 		localStorage.removeItem('refreshToken')
