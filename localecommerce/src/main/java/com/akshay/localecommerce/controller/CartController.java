@@ -33,7 +33,7 @@ public class CartController {
         User user = userManagementService.getUserByEmail(email);
 
         if (user == null) {
-            return new ResponseEntity<>("Cart not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
         Integer userId = user.getId();
