@@ -22,6 +22,7 @@ public class Order {
 
     private LocalDateTime orderDate;
     private String status; // e.g., PENDING, SHIPPED, DELIVERED
+    private String paymentIntentId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "order-orderItem")

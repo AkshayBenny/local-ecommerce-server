@@ -49,8 +49,6 @@ export default function CartPage() {
 			</div>
 		)
 
-	console.log(cart)
-
 	return (
 		<PrivateRoute>
 			<main className='max-w-screen min-h-screen mb-12'>

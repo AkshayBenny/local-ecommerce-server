@@ -1,5 +1,7 @@
 'use client'
 
+import CheckoutForm from '@/components/CheckoutForm'
+import Spinner from '@/components/Spinner'
 import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
 import axiosInstance from '@/utils/axiosInstance'
@@ -13,6 +15,7 @@ export default function CheckoutPage() {
 	const router = useRouter()
 	const user = useRecoilValue(userState)
 	const [cart, setCart] = useRecoilState(cartState)
+	const [loading, setLoading] = useState<Boolean>(false)
 	const [formData, setFormData] = useState({
 		city: '',
 		street: '',
@@ -20,7 +23,6 @@ export default function CheckoutPage() {
 		postcode: '',
 		country: '',
 	})
-	console.log(user)
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
@@ -29,7 +31,8 @@ export default function CheckoutPage() {
 
 	const checkoutHandler = async () => {
 		try {
-			await axiosInstance.post('adminuser/order/create')
+			const response = await axiosInstance.post('adminuser/order/create')
+			return response.data
 		} catch (error: any) {
 			console.log(error.message)
 		}
@@ -63,18 +66,23 @@ export default function CheckoutPage() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		setLoading(true)
 		try {
 			await updateProfileHandler()
-			await checkoutHandler()
-			router.push('/payment')
+			const orderId = await checkoutHandler()
+			setLoading(false)
+			router.push(`/payment/${orderId}/`)
 		} catch (error: any) {
 			console.log(error?.message)
+			setLoading(false)
 		}
 	}
 
 	useEffect(() => {
-		getUserProfileHandler()
-		fetchCart(setCart)
+		;(async () => {
+			await getUserProfileHandler()
+			await fetchCart(setCart)
+		})()
 	}, [])
 
 	const totalAmount = cart.reduce(
@@ -241,8 +249,10 @@ export default function CheckoutPage() {
 						</div>
 					</div>
 					<div className='flex justify-end mt-12'>
-						<button className='w-full bg-customGreen py-[14px] rounded-full text-white px-12'>
-							Place Order
+						<button
+							type='submit'
+							className='w-full bg-customGreen py-[14px] rounded-full text-white px-12'>
+							{loading ? <Spinner /> : 'Place Order'}
 						</button>
 					</div>
 				</form>

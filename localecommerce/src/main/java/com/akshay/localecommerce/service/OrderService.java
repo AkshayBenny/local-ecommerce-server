@@ -108,7 +108,7 @@ public class OrderService {
             userCart.getProducts().clear(); // Clear the cart after order is created
             cartRepo.save(userCart);
 
-            return new ResponseEntity<>("Order created successfully", HttpStatus.OK);
+            return new ResponseEntity<>(newUserOrder.getId().toString(), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Order creation failed", HttpStatus.BAD_REQUEST);
