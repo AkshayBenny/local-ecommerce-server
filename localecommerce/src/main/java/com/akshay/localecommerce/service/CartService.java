@@ -1,11 +1,14 @@
 package com.akshay.localecommerce.service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.akshay.localecommerce.dto.CartDTO;
+import com.akshay.localecommerce.dto.CartItemDTO;
 import com.akshay.localecommerce.model.Cart;
 import com.akshay.localecommerce.model.CartItem;
 import com.akshay.localecommerce.model.Product;
@@ -26,47 +29,78 @@ public class CartService {
     @Autowired
     private CartItemRepository cartItemRepo;
 
-    public ResponseEntity<Cart> getCartByUserId(Integer userId) {
-        return new ResponseEntity<>(cartRepo.findByUserId(userId), HttpStatus.OK);
+    @Autowired
+    private AmazonS3Service s3Service;
+
+    public ResponseEntity<CartDTO> getCartByUserId(Integer userId) {
+        Cart cart = cartRepo.findByUserId(userId);
+        if (cart != null) {
+            CartDTO cartDTO = new CartDTO();
+            cartDTO.setId(cart.getId());
+            cartDTO.setProducts(cart.getProducts().stream().map(cartItem -> {
+                CartItemDTO cartItemDTO = new CartItemDTO();
+                cartItemDTO.setId(cartItem.getId());
+                cartItemDTO.setQuantity(cartItem.getQuantity());
+
+                Optional<Product> productOptional = productRepo.findById(cartItem.getProduct().getId());
+                if (productOptional.isPresent()) {
+                    Product product = productOptional.get();
+                    product.setImage(s3Service.getFileUrl(product.getId().toString()));
+                    cartItemDTO.setProduct(product);
+                }
+
+                return cartItemDTO;
+            }).collect(Collectors.toList()));
+
+            return new ResponseEntity<>(cartDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<String> addToUserCart(Integer productId, Integer quantity, User user) {
         try {
-            Cart userCart = cartRepo.findByUserId(user.getId());
-            if (userCart == null) {
-                userCart = new Cart(user);
-            }
-
-            Optional<Product> productOptional = productRepo.findById(productId);
-            if (productOptional.isPresent()) {
-                Product product = productOptional.get();
-
-                CartItem cartItem = userCart.getProducts().stream()
-                        .filter(item -> item.getProduct().getId().equals(productId))
-                        .findFirst()
-                        .orElse(null);
-
-                if (cartItem == null) {
-                    cartItem = new CartItem();
-                    cartItem.setProduct(product);
-                    cartItem.setQuantity(quantity);
-                    cartItem.setCart(userCart);
-                    userCart.getProducts().add(cartItem);
-                } else {
-                    cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            synchronized (this) {
+                Cart userCart = cartRepo.findByUserId(user.getId());
+                if (userCart == null) {
+                    userCart = new Cart(user);
                 }
 
-                cartRepo.save(userCart);
-                cartItemRepo.save(cartItem);
+                Optional<Product> productOptional = productRepo.findById(productId);
+                if (productOptional.isPresent()) {
+                    Product product = productOptional.get();
 
-                return new ResponseEntity<>("Product added to cart successfully", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+                    boolean productExistsInCart = false;
+
+                    for (CartItem item : userCart.getProducts()) {
+                        if (item.getProduct().getId().equals(productId)) {
+                            item.setQuantity(item.getQuantity() + quantity);
+                            productExistsInCart = true;
+                            cartItemRepo.save(item); 
+                            break;
+                        }
+                    }
+
+                    if (!productExistsInCart) {
+                        CartItem cartItem = new CartItem();
+                        cartItem.setProduct(product);
+                        cartItem.setQuantity(quantity);
+                        cartItem.setCart(userCart);
+                        userCart.getProducts().add(cartItem);
+                        cartItemRepo.save(cartItem); 
+                    }
+
+                    cartRepo.save(userCart); 
+
+                    return new ResponseEntity<>("Product added to cart successfully", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>("Adding to cart went wrong!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Adding to cart went wrong!", HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<String> removeCartItemByProductId(Integer productId, Integer userId) {

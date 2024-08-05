@@ -1,4 +1,5 @@
 'use client'
+
 import { userState } from '@/state/authState'
 import { cartState } from '@/state/cartState'
 import { Product } from '@/types/product'
@@ -7,12 +8,14 @@ import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { MouseEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Chat2LineIcon from 'remixicon-react/Chat2LineIcon'
 import PriceTag3LineIcon from 'remixicon-react/PriceTag3LineIcon'
 import AddLineIcon from 'remixicon-react/AddLineIcon'
 import SubtractLineIcon from 'remixicon-react/SubtractLineIcon'
+import Comment from '@/components/Comment'
+import { capitalizeWords } from '@/utils/capitalizeWords'
 
 export default function ProductPage() {
 	const [product, setProduct] = useState<any>({})
@@ -73,7 +76,8 @@ export default function ProductPage() {
 					<div className='flex gap-[4px] justify-start items-center'>
 						<PriceTag3LineIcon className='w-[16px] h-[16px] text-customGreen' />
 						<p className='font-light text-[14px] opacity-60'>
-							{product?.category}
+							{product?.category &&
+								capitalizeWords(product?.category)}
 						</p>
 					</div>
 				</div>
@@ -92,13 +96,13 @@ export default function ProductPage() {
 
 				{user ? (
 					<div className='flex gap-3 items-center justify-center mt-12'>
-						<div className='flex items-center justify-center gap-4 border border-customVeryLightBlack p-2 rounded-full h-[64px]'>
+						<div className='flex items-center justify-center gap-4 border border-customVeryLightBlack px-2 rounded-full h-[54px]'>
 							<button
 								onClick={(e) => {
 									setQuantity(quantity + 1)
 								}}
-								className='bg-customGreen rounded-full p-3'>
-								<AddLineIcon className='h-[16px] w-[16px] text-white' />
+								className='bg-[#F2F2F2] rounded-full p-3'>
+								<AddLineIcon className='h-[16px] w-[16px] text-[#1A1A1A]' />
 							</button>
 							<input
 								type='number'
@@ -112,8 +116,8 @@ export default function ProductPage() {
 								onClick={(e) => {
 									quantity > 1 && setQuantity(quantity - 1)
 								}}
-								className='bg-customGreen rounded-full p-3'>
-								<SubtractLineIcon className='h-[16px] w-[16px] text-white' />
+								className='bg-[#F2F2F2] rounded-full p-3'>
+								<SubtractLineIcon className='h-[16px] w-[16px] text-[#1A1A1A]' />
 							</button>
 						</div>
 						<button
@@ -131,6 +135,8 @@ export default function ProductPage() {
 						</button>
 					</Link>
 				)}
+
+				<Comment pid={Number(params.pid)} />
 			</div>
 		</main>
 	)

@@ -5,6 +5,8 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 import { userState, tokenState } from '../state/authState'
 import axiosInstance from '@/utils/axiosInstance'
+import { cartState } from '@/state/cartState'
+import { fetchCart } from '@/utils/fetchCart'
 
 interface RegisterData {
 	name: string
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const router = useRouter()
 	const [user, setUser] = useRecoilState(userState)
 	const [token, setToken] = useRecoilState(tokenState)
+	const [cart, setCart] = useRecoilState(cartState)
 
 	useEffect(() => {
 		const savedToken = localStorage.getItem('token')
@@ -72,6 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				'Authorization'
 			] = `Bearer ${token}`
 			await getUserProfile()
+			await fetchCart(setCart)
 			router.push('/')
 		} catch (error: any) {
 			console.error('Login failed:', error.response?.data)
@@ -99,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}
 
+	
 	const removeSavedTokens = (): void => {
 		localStorage.removeItem('token')
 		localStorage.removeItem('refreshToken')
