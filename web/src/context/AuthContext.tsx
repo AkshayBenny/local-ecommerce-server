@@ -74,9 +74,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			axiosInstance.defaults.headers.common[
 				'Authorization'
 			] = `Bearer ${token}`
-			await getUserProfile()
+			const role: string = await getUserProfile()
+			if (role === 'ADMIN') {
+				router.push('/admin')
+			} else {
+				router.push('/')
+			}
 			await fetchCart(setCart)
-			router.push('/')
+			console.log(response.data)
 		} catch (error: any) {
 			console.error('Login failed:', error.response?.data)
 			alert('Something went wrong!')
@@ -98,12 +103,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		try {
 			const response = await axiosInstance.get('/adminuser/get-profile')
 			setUser(response?.data?.users)
+			return response.data?.users?.role
 		} catch (error: any) {
 			console.error('Fetching user profile failed:', error.response?.data)
 		}
 	}
 
-	
 	const removeSavedTokens = (): void => {
 		localStorage.removeItem('token')
 		localStorage.removeItem('refreshToken')

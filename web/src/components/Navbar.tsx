@@ -34,6 +34,18 @@ export default function NavBar() {
 						placeholder='Search...'
 					/>
 				</div>
+				{user && user.role === 'ADMIN' ? (
+					<>
+						<Link href='/admin'>
+							<div className='relative flex items-center justify-center'>
+								<UserLineIcon className='h-[20px] w-[20px] text-[#1A1A1A]' />
+								<p>Dashboard</p>
+							</div>
+						</Link>
+					</>
+				) : (
+					<></>
+				)}
 				{user && (
 					<div className='flex items-center justify-center gap-4'>
 						<Link href='/cart'>
