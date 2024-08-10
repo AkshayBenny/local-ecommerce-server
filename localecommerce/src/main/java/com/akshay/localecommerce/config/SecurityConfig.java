@@ -20,6 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.akshay.localecommerce.security.JWTAuthFilter;
 import com.akshay.localecommerce.service.UserService;
 
+/**
+ * Security configuration to setup spring security
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -30,6 +33,13 @@ public class SecurityConfig {
     @Autowired
     private JWTAuthFilter jwtAuthFilter;
 
+    /**
+     * Configures the security filter chain
+     * 
+     * @param httpSecurity {@link HttpSecurity}
+     * @return the configured {@link SecurityFilterChain}
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
@@ -48,6 +58,11 @@ public class SecurityConfig {
 
     }
 
+    /**
+     * Configures the authentication provider
+     * 
+     * @return configured {@link AuthenticationProvider}
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -56,12 +71,24 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
+    /**
+     * Configures the password encoder to use bcrypt
+     * 
+     * @return {@link PasswordEncoder}
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
 
     }
 
+    /**
+     * Authentication manager bean
+     * 
+     * @param authenticationConfiguration {@link AuthenticationConfiguration}
+     * @return {@link AuthenticationManager}
+     * @throws Exception if any during configuration
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {

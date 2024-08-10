@@ -13,6 +13,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+/**
+ * Service class for communicating with Amazon S3
+ */
 @Service
 public class AmazonS3Service {
 
@@ -22,6 +25,13 @@ public class AmazonS3Service {
     @Value("${aws.bucketName}")
     private String bucketName;
 
+    /**
+     * Uploads file to S3
+     * @param multipartFile The uploaded image file
+     * @param fileName The name of the file stored in s3 bucket
+     * @return The name of the uploaded file
+     * @throws IOException
+     */
     public String uploadFile(MultipartFile multipartFile, String fileName) throws IOException {
         File file = convertMultipartFileToFile(multipartFile);
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
@@ -29,6 +39,13 @@ public class AmazonS3Service {
         return fileName;
     }
 
+    /**
+     * Converts into a multipart file
+     * 
+     * @param multipartFile The multipart file to convert
+     * @return Converted file
+     * @throws IOException
+     */
     private File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
         File file = new File(multipartFile.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -37,6 +54,11 @@ public class AmazonS3Service {
         return file;
     }
 
+    /**
+     * Gets the name of the file uploaded to s3 bucket
+     * @param fileName Name of the file
+     * @return The url of the file uploaded to s3 bucket
+     */
     public String getFileUrl(String fileName) {
         try {
             return s3Client.getUrl(bucketName, fileName).toString();
@@ -46,6 +68,10 @@ public class AmazonS3Service {
         }
     }
 
+    /**
+     * Deletes file by filename from s3 bucket
+     * @param fileName
+     */
     public void deleteFileById(String fileName) {
         s3Client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
     }

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
+/**
+ * REST controller for handling comments under products
+ */
 @RestController
 public class CommentController {
     @Autowired
@@ -23,11 +26,22 @@ public class CommentController {
     @Autowired
     private UserManagementService userManagementService;
 
+    /**
+     * Get comments related to a product
+     * 
+     * @param pid Product id
+     * @return List of comments if any or empty list
+     */
     @GetMapping("public/comment/get-comment/{pid}")
     public ResponseEntity<?> getComments(@PathVariable Integer pid) {
         return commentService.getCommentsByProductId(pid);
     }
 
+    /**
+     * Posts a new comment under a product
+     * @param requestBody An object containing comment to be added and the id of the product 
+     * @return {@link ResponseEntity} message showing the result of this opetation
+     */
     @PostMapping("adminuser/comment/add-comment")
     public ResponseEntity<?> addComment(@RequestBody Map<String, Object> requestBody) {
         String comment = (String) requestBody.get("comment");

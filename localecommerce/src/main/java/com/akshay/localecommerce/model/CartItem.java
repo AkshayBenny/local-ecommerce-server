@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+ * This CartItem represents an item in a cart
+ * Linked to either a cart or an order
+ */
 @Data
 @Entity
 public class CartItem {

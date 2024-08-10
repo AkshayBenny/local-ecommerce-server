@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/*Represents an item inside an order
+ * Linked to a product and order
+ */
 @Data
 @Entity
 public class OrderItem {

@@ -18,6 +18,9 @@ import com.akshay.localecommerce.repository.CartRepository;
 import com.akshay.localecommerce.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Service to manage cart operations
+ */
 @Service
 public class CartService {
     @Autowired
@@ -32,6 +35,13 @@ public class CartService {
     @Autowired
     private AmazonS3Service s3Service;
 
+    /**
+     * Gets the cart by user id
+     * 
+     * @param userId User id
+     * @return {@link ResponseEntity} consisting of the {@link CartDTO} or http
+     *         status of NOT_FOUND
+     */
     public ResponseEntity<CartDTO> getCartByUserId(Integer userId) {
         Cart cart = cartRepo.findByUserId(userId);
         if (cart != null) {
@@ -58,6 +68,14 @@ public class CartService {
         }
     }
 
+    /**
+     * Adds a product to the cart associated with the {@link User}
+     * 
+     * @param productId Product id
+     * @param quantity  Quantity of the product
+     * @param user      User entity
+     * @return {@link ResponseEntity} message indicating success or failure
+     */
     public ResponseEntity<String> addToUserCart(Integer productId, Integer quantity, User user) {
         try {
             synchronized (this) {
@@ -76,7 +94,7 @@ public class CartService {
                         if (item.getProduct().getId().equals(productId)) {
                             item.setQuantity(item.getQuantity() + quantity);
                             productExistsInCart = true;
-                            cartItemRepo.save(item); 
+                            cartItemRepo.save(item);
                             break;
                         }
                     }
@@ -87,10 +105,10 @@ public class CartService {
                         cartItem.setQuantity(quantity);
                         cartItem.setCart(userCart);
                         userCart.getProducts().add(cartItem);
-                        cartItemRepo.save(cartItem); 
+                        cartItemRepo.save(cartItem);
                     }
 
-                    cartRepo.save(userCart); 
+                    cartRepo.save(userCart);
 
                     return new ResponseEntity<>("Product added to cart successfully", HttpStatus.OK);
                 } else {
@@ -103,6 +121,14 @@ public class CartService {
         }
     }
 
+    /**
+     * Removes a {@link CartItem} from the cart
+     * 
+     * @param productId Product id
+     * @param userId    User id
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
     public ResponseEntity<String> removeCartItemByProductId(Integer productId, Integer userId) {
         System.out.printf("userId: " + userId + "   productId: " + productId);
         try {

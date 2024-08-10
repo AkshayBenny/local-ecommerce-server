@@ -10,6 +10,11 @@ import lombok.Setter;
 import java.util.Collection;
 import java.util.List;
 
+/*
+ * Represents a user 
+ * Linked to cart, orders, comments
+ * Integrates with spring security through implementng {@link UserDetails}
+ */
 @Entity
 @Getter
 @Setter
@@ -40,41 +45,81 @@ public class User implements UserDetails {
     @JsonManagedReference(value = "user-comment")
     private List<Comment> comments;
 
+    /**
+     * Returns the user's authorities based on their role.
+     *
+     * @return the authorities granted to the user.
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
+    /**
+     * Returns the user's password.
+     *
+     * @return the user's password.
+     */
     @Override
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Returns the user's name which is the email.
+     *
+     * @return the user's email.
+     */
     @Override
     public String getUsername() {
         return email;
     }
 
+    /**
+     * Checks if the user's account is non-expired.
+     *
+     * @return true if the account is non-expired otherwise false.
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    /**
+     * Checks if the user's account is non-locked.
+     *
+     * @return true if the account is non-locked othersiwe it returns false.
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * Checks if the user's credentials are non-expired.
+     *
+     * @return true if the credentials are non-expired otherwise it returns false.
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    /**
+     * Checks if the user is enabled.
+     *
+     * @return true if the user is enabled otherwise false.
+     */
     @Override
     public boolean isEnabled() {
         return true;
     }
 
+    /**
+     * Return a string representation of the user entity
+     * 
+     * @return a string representation of the user entity
+     */
     @Override
     public String toString() {
         return "User{" +

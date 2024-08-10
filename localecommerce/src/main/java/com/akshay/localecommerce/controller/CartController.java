@@ -17,6 +17,9 @@ import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.service.CartService;
 import com.akshay.localecommerce.service.UserManagementService;
 
+/**
+ * REST controller for managing user carts
+ */
 @RestController
 @RequestMapping("adminuser/cart")
 public class CartController {
@@ -26,6 +29,11 @@ public class CartController {
     @Autowired
     private UserManagementService userManagementService;
 
+    /**
+     * Gets the cart associated with user by user id
+     * 
+     * @return {@link ResponseEntity} showing the result of this operation
+     */
     @GetMapping("/get")
     public ResponseEntity<?> getCartByUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,6 +49,13 @@ public class CartController {
         return cartService.getCartByUserId(userId);
     }
 
+    /**
+     * Add a new product to the cart
+     * 
+     * @param pid
+     * @param quantity
+     * @return {@link ResponseEntity} message showing the result of this operation
+     */
     @PostMapping("add-product/{pid}/{quantity}")
     public ResponseEntity<String> addToUserCart(@PathVariable Integer pid, @PathVariable Integer quantity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,11 +69,23 @@ public class CartController {
         return cartService.addToUserCart(pid, quantity, user);
     }
 
+    /**
+     * Edits a cart by its id
+     * 
+     * @param id the cart id
+     * @return {@link ResponseEntity} message showing the result of this opetation
+     */
     @PutMapping("edit/{id}")
     public ResponseEntity<String> editCartById(String id) {
         return new ResponseEntity<>("Edit cart by id", HttpStatus.OK);
     }
 
+    /**
+     * Deletes a product from the cart
+     * 
+     * @param pid product id
+     * @return {@link ResponseEntity} message showing the result of this operation
+     */
     @DeleteMapping("remove/product/{pid}")
     public ResponseEntity<String> removeCartProduct(@PathVariable Integer pid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,10 +93,5 @@ public class CartController {
         User user = userManagementService.getUserByEmail(email);
         Integer userId = user.getId();
         return cartService.removeCartItemByProductId(pid, userId);
-    }
-
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> deleteCartById(String id) {
-        return new ResponseEntity<>("Delete cart by id", HttpStatus.OK);
     }
 }

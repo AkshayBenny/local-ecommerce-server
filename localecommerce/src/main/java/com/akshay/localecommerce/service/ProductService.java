@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.akshay.localecommerce.model.Product;
 import com.akshay.localecommerce.repository.ProductRepository;
 
+/**
+ * Service to manage the products in the database
+ */
 @Service
 public class ProductService {
     @Autowired
@@ -21,6 +24,17 @@ public class ProductService {
     @Autowired
     AmazonS3Service s3Service;
 
+    /**
+     * Create a new product
+     * 
+     * @param name      Name of the product
+     * @param desc      Description of the product
+     * @param price     Price of the product
+     * @param category  Category of the product
+     * @param imageFile Image of the product
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successfull or not
+     */
     public ResponseEntity<String> createProduct(
             String name, String desc, String price, String category, MultipartFile imageFile) {
 
@@ -54,6 +68,11 @@ public class ProductService {
         return new ResponseEntity<>("Error creating a product", HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Fetchs all products in the database
+     * 
+     * @return List of all {@link Product}s
+     */
     public ResponseEntity<List<Product>> getAllProducts() {
         try {
             List<Product> products = productRepo.findAll().stream().map(product -> {
@@ -74,13 +93,20 @@ public class ProductService {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Get a product by its id
+     * 
+     * @param id Product id
+     * @return {@link ResponseEntity} with the {@link Product} object or
+     *         {@code null}
+     */
     public ResponseEntity<Product> getProductById(Integer id) {
         try {
             Optional<Product> product = productRepo.findById(id);
 
             if (product.isPresent()) {
                 Product productWithImageUrl = new Product();
-                 productWithImageUrl.setId(product.get().getId());
+                productWithImageUrl.setId(product.get().getId());
                 productWithImageUrl.setName(product.get().getName());
                 productWithImageUrl.setDescription(product.get().getDescription());
                 productWithImageUrl.setPrice(product.get().getPrice());
@@ -97,6 +123,18 @@ public class ProductService {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Updates the values of a particular product by its id
+     * 
+     * @param id          Product id
+     * @param name        Name of the product
+     * @param description Description of the product
+     * @param price       Price of the product
+     * @param category    Category of the product
+     * @param file        Image of the product
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successfull or not
+     */
     public ResponseEntity<String> editProduct(
             Integer id, String name, String description, String price, String category, MultipartFile file) {
         try {
@@ -150,6 +188,13 @@ public class ProductService {
         }
     }
 
+    /**
+     * Deletes a product by its id
+     * 
+     * @param id Product id
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
     public ResponseEntity<String> deleteProductById(Integer id) {
         try {
             Optional<Product> product = productRepo.findById(id);

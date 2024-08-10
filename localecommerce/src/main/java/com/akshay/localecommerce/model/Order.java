@@ -7,6 +7,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+/*
+ * Represents the order placed by the user
+ * Linked to a user and can contain multiple order items
+ */
 @Data
 @Entity
 @Table(name = "orders")

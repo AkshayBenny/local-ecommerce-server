@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service to manage comments under products
+ */
 @Service
 public class CommentService {
     @Autowired
@@ -21,6 +24,13 @@ public class CommentService {
     @Autowired
     private ProductRepository productRepo;
 
+    /**
+     * Fetches the comments related to a product
+     * 
+     * @param productId Product id
+     * @return {@link ResponseEntity} containing the {@link Comment} related that
+     *         product or {@code null}
+     */
     public ResponseEntity<?> getCommentsByProductId(Integer productId) {
         try {
             return new ResponseEntity<>(commentRepo.findByProductId(productId), HttpStatus.OK);
@@ -31,6 +41,15 @@ public class CommentService {
         return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Adds a new comment to a specific product
+     * 
+     * @param productId Product id
+     * @param comment   The comment to add
+     * @param user      The user entity
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
     public ResponseEntity<?> addComment(Integer productId, String comment, User user) {
         try {
             Optional<Product> productOptional = productRepo.findById(productId);

@@ -20,6 +20,9 @@ import com.akshay.localecommerce.repository.OrderItemRepository;
 import com.akshay.localecommerce.repository.OrderRepository;
 import com.akshay.localecommerce.repository.UserRepository;
 
+/**
+ * Service to manage order placed by the users
+ */
 @Service
 public class OrderService {
     @Autowired
@@ -34,6 +37,12 @@ public class OrderService {
     @Autowired
     private OrderItemRepository orderItemRepo;
 
+    /**
+     * Fetches all the orders associated with a user
+     * 
+     * @param email Email address of the user
+     * @return List of orders associated with the user or an empty list
+     */
     public ResponseEntity<?> getAllOrdersByUserEmail(String email) {
         try {
             List<Order> userOrders = orderRepo.findByUserEmail(email);
@@ -45,6 +54,27 @@ public class OrderService {
         return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Fetches all the orders in the database
+     * 
+     * @return List of orders
+     */
+    public ResponseEntity<?> getAllOrders() {
+        try {
+            List<Order> orders = orderRepo.findAllByOrderByOrderDateDesc();
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("An error occurred while fetching orders", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Get an order by its id
+     * 
+     * @param orderId Order id
+     * @return {@link ResponseEntity} containing the order or {@code null}
+     */
     public ResponseEntity<?> getOrderById(Integer orderId) {
         try {
             Optional<Order> orderOptional = orderRepo.findById(orderId);
@@ -60,6 +90,40 @@ public class OrderService {
         return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Update the status of order. Can take values "PENDING", "SHIPPED" or
+     * "DELIVERED"
+     * 
+     * @param orderId Order id
+     * @param status  Status of the order
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
+    public ResponseEntity<?> updateOrderStatus(Integer orderId, String status) {
+        try {
+            Optional<Order> orderOptional = orderRepo.findById(orderId);
+            if (!orderOptional.isPresent()) {
+                return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+            }
+            Order order = orderOptional.get();
+            order.setStatus(status);
+            orderRepo.save(order);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
+
+    }
+
+    /**
+     * Creates a new order
+     * 
+     * @param email Email address of the user
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
     public ResponseEntity<String> createOrder(String email) {
         try {
             Optional<User> userOptional = userRepo.findByEmail(email);

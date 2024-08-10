@@ -11,17 +11,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.akshay.localecommerce.service.OrderService;
-
 import org.springframework.security.core.Authentication;
 
+/**
+ * REST controller to manage orders placed by the user
+ */
 @RestController
 @RequestMapping("adminuser/order")
 public class OrderController {
     @Autowired
     OrderService orderService;
 
+    /**
+     * Gets all the orders associated with a user
+     * 
+     * @return {@link ResponseEntity} containing a list of the all orders
+     */
     @GetMapping("/all")
     public ResponseEntity<?> getAllUserOrders() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -29,11 +35,22 @@ public class OrderController {
         return orderService.getAllOrdersByUserEmail(email);
     }
 
+    /**
+     * Get a user order by id
+     * 
+     * @param orderId id of the order
+     * @return {@link ResponseEntity} containing the order entity or null
+     */
     @GetMapping("{orderId}")
     public ResponseEntity<?> getOrderById(@PathVariable Integer orderId) {
         return orderService.getOrderById(orderId);
     }
 
+    /**
+     * Creates a new order
+     * 
+     * @return {@link ResponseEntity} message showing the result of this operation
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createOrder() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,13 +58,4 @@ public class OrderController {
         return orderService.createOrder(email);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateUserOrder(String id) {
-        return new ResponseEntity<>("Update user order", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteOrderById(String id) {
-        return new ResponseEntity<>("Delete order by id", HttpStatus.OK);
-    }
 }

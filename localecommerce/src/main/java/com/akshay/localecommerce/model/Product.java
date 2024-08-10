@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+/*
+ * Represents a product in the application
+ * Linked to cartitems, order items and comments
+ */
 @Data
 @Entity
 public class Product {

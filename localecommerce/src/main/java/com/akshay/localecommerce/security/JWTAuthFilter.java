@@ -17,6 +17,9 @@ import com.akshay.localecommerce.service.UserService;
 
 import java.io.IOException;
 
+/**
+ * Component to handle JWT authentication
+ */
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
 
@@ -26,6 +29,13 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
+    /**
+     * Proccesses the incoming request to extract and validate the JWT token
+     * 
+     * @param request The http request
+     * @param response The http response
+     * @param filterChain The fileter chain to pass the req and res to the next filter
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {

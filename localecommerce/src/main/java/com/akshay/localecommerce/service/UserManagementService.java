@@ -14,12 +14,15 @@ import org.springframework.stereotype.Service;
 
 import com.akshay.localecommerce.dto.ReqRes;
 import com.akshay.localecommerce.dto.UserProfileDTO;
-import com.akshay.localecommerce.model.Order;
+
 import com.akshay.localecommerce.model.User;
 import com.akshay.localecommerce.repository.OrderRepository;
 import com.akshay.localecommerce.repository.UserRepository;
 import com.akshay.localecommerce.security.JWTUtils;
 
+/**
+ * Service to manage users in the database
+ */
 @Service
 public class UserManagementService {
     @Autowired
@@ -34,9 +37,13 @@ public class UserManagementService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private OrderRepository orderRepo;
-
+    /**
+     * Registers a new user
+     * 
+     * @param registrationRequest Contains registration values such as email, name,
+     *                            password, role etc..
+     * @return {@link ResponseEntity} stating if the operation was successful or not
+     */
     public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
 
@@ -61,6 +68,13 @@ public class UserManagementService {
         return resp;
     }
 
+    /**
+     * Logs an existing user into the application
+     * 
+     * @param loginRequest Login details such as email and password
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
     public ReqRes login(ReqRes loginRequest) {
         ReqRes response = new ReqRes();
         try {
@@ -83,6 +97,12 @@ public class UserManagementService {
         return response;
     }
 
+    /**
+     * Generates a refresh token
+     * 
+     * @param refreshTokenReqiest Details required to generate a new refresh token
+     * @return A refresh token
+     */
     public ReqRes refreshToken(ReqRes refreshTokenReqiest) {
         ReqRes response = new ReqRes();
         try {
@@ -106,6 +126,11 @@ public class UserManagementService {
         }
     }
 
+    /**
+     * Fetch all users in the database
+     * 
+     * @return List of all {@link User} objects
+     */
     public ReqRes getAllUsers() {
         ReqRes reqRes = new ReqRes();
 
@@ -127,6 +152,12 @@ public class UserManagementService {
         }
     }
 
+    /**
+     * Get a user by their id
+     * 
+     * @param id User id
+     * @return A {@link User} object or {@code null} if not found
+     */
     public ReqRes getUsersById(Integer id) {
         ReqRes reqRes = new ReqRes();
         try {
@@ -141,11 +172,23 @@ public class UserManagementService {
         return reqRes;
     }
 
+    /**
+     * Fetch a user by their email address
+     * 
+     * @param email Email address of the user
+     * @return A {@link User} object or {@code null} if not found
+     */
     public User getUserByEmail(String email) {
         Optional<User> user = userRepo.findByEmail(email);
         return user.get();
     }
 
+    /**
+     * Deletes a user by their id
+     * 
+     * @param userId User id
+     * @return Returns a message stating if the operation was successful or not
+     */
     public ReqRes deleteUser(Integer userId) {
         ReqRes reqRes = new ReqRes();
         try {
@@ -165,6 +208,14 @@ public class UserManagementService {
         return reqRes;
     }
 
+    /**
+     * Update the data related to a user profile
+     * 
+     * @param userId      User id
+     * @param updatedUser The new data to replace existing data related a user
+     *                    entity
+     * @return Message stating if the operation was successful or not
+     */
     public ReqRes updateUser(Integer userId, User updatedUser) {
         ReqRes reqRes = new ReqRes();
         try {
@@ -196,6 +247,12 @@ public class UserManagementService {
         return reqRes;
     }
 
+    /**
+     * Gets user information
+     * 
+     * @param email Email address
+     * @return {@link ReqRes} object containing the user information
+     */
     public ReqRes getMyInfo(String email) {
         ReqRes reqRes = new ReqRes();
         try {
@@ -217,6 +274,18 @@ public class UserManagementService {
 
     }
 
+    /**
+     * Sets the address of the user for their profile
+     * 
+     * @param userEmail    Email address of the user
+     * @param city         City of the user
+     * @param street       Street of the user
+     * @param buildingName Building name of the user
+     * @param postcode     Postcode of the user
+     * @param country      Country of residence of the user
+     * @return {@link ResponseEntity} message stating if the operation was
+     *         successful or not
+     */
     public ResponseEntity<String> setUserAddress(String userEmail, String city, String street, String buildingName,
             String postcode, String country) {
         try {
@@ -243,6 +312,13 @@ public class UserManagementService {
         return new ResponseEntity<>("failure", HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Fetches the profile information related to a user
+     * 
+     * @param email Email address
+     * @return {@link ResponseEntity} containing the profile information if found or
+     *         {@code null}
+     */
     public ResponseEntity<?> getUserProfile(String email) {
         try {
             Optional<User> userOptional = userRepo.findByEmail(email);
