@@ -11,21 +11,30 @@ import { useRecoilState } from 'recoil'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
 
 export default function CartPage() {
+	// Recoil state hook to manage global state of the cart
 	const [cart, setCart] = useRecoilState(cartState)
 
+	/**
+	 * Function to handle deletion of a product from the cart
+	 * @param productId - Product Id to delete
+	 */
 	const removeFromCart = async (productId: string) => {
 		try {
+			// Send a DELETE request to the backend
 			await axiosInstance.delete(
 				`adminuser/cart/remove/product/${productId}`
 			)
+			// Update the cart state
 			setCart((oldCart) =>
 				oldCart.filter((product) => product.id !== productId)
 			)
 		} catch (error: any) {
+			// If error is encountered, log it to the console
 			console.log('Error removing product:', error?.message)
 		}
 	}
 
+	// Fetch the cart when the component is mounted
 	useEffect(() => {
 		const fetchCart = async () => {
 			try {
@@ -39,6 +48,7 @@ export default function CartPage() {
 		fetchCart()
 	}, [])
 
+	// If the cart is empty display a message
 	if (cart && cart.length === 0)
 		return (
 			<div>

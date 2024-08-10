@@ -6,15 +6,19 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function AdminHomePage() {
+	// State hook to manage the orders
 	const [orders, setOrders] = useState([])
 
+	// Fetch all orders
 	useEffect(() => {
 		const fetchAllUserOrders = async () => {
 			try {
+				// Send a GET request to the backend to get all orders
 				const response = await axiosInstance.get('/admin/order/all')
+				// Update the order state
 				setOrders(response?.data)
-				console.log(response.data)
 			} catch (error: any) {
+				// If error is encountered, log it to the console
 				console.log(error.message)
 			}
 		}
@@ -28,12 +32,16 @@ export default function AdminHomePage() {
 					Admin Dashboard
 				</h1>
 				<div className='flex flex-col items-center justify-center md:grid grid-cols-2 gap-6 h-full w-full'>
-					<Link href='admin/create' className='w-full'>
+					<Link
+						href='admin/create'
+						className='w-full'>
 						<div className='bg-customGreen h-[100px] flex items-center justify-center rounded-md hover:bg-green-500 transition w-full'>
 							<p className='text-white text-xl'>Create</p>
 						</div>
 					</Link>
-					<Link href='admin/products' className='w-full'>
+					<Link
+						href='admin/products'
+						className='w-full'>
 						<div className='bg-customGreen h-[100px] flex items-center justify-center rounded-md hover:bg-green-500 transition w-full'>
 							<p className='text-white text-xl'>Edit products</p>
 						</div>

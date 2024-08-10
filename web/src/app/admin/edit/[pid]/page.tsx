@@ -1,5 +1,6 @@
 'use client'
 
+import Spinner from '@/components/Spinner'
 import axiosInstance from '@/utils/axiosInstance'
 import axios from 'axios'
 import Image from 'next/image'
@@ -7,13 +8,19 @@ import { useParams } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function AdminEditProductPage() {
+	// State hooks
 	const [product, setProduct] = useState<any>({})
 	const [loading, setLoading] = useState(false)
 	const params = useParams()
 
+	/**
+	 * Function to handle the upload of a new product
+	 * @param e - Form submit event
+	 */
 	const productUpdateHandler = async (e: React.FormEvent) => {
 		e.preventDefault()
 
+		// Initialize a new form data object
 		const formData = new FormData()
 		formData.append('productName', product.name)
 		formData.append('productDescription', product.description)
@@ -24,6 +31,7 @@ export default function AdminEditProductPage() {
 		}
 
 		try {
+			// Send form data to the backend
 			const response = await axiosInstance.put(
 				`/admin/product/edit/${params.pid}`,
 				formData,
@@ -41,18 +49,31 @@ export default function AdminEditProductPage() {
 		}
 	}
 
+	/**
+	 * Handles the input field changes
+	 * @param e - Change event for input and text area fields
+	 */
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target
 		setProduct((prev: any) => ({ ...prev, [name]: value }))
 	}
+
+	/**
+	 * Function to handle file input changes and update the state
+	 * @param e - Change event from file input
+	 */
 	const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files
 		if (files?.length) {
 			setProduct((prev: any) => ({ ...prev, image: files[0] }))
 		}
 	}
+
+	/**
+	 * Fetches product by id from the backend and updates the product state
+	 */
 	useEffect(() => {
 		const fetchProduct = async () => {
 			setLoading(true)
@@ -71,8 +92,13 @@ export default function AdminEditProductPage() {
 		fetchProduct()
 	}, [params.pid])
 
+	// Display a spinner if loading
 	if (loading) {
-		return <div>Loading...</div>
+		return (
+			<div>
+				<Spinner />
+			</div>
+		)
 	}
 	return (
 		<div>

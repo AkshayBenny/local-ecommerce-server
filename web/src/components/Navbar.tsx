@@ -77,14 +77,15 @@ export default function NavBar() {
 
 				{!user && <NavAuthBtn />}
 			</nav>
-			<div className='w-full h-[100px] relative'>
+			{/* <div className='w-full h-[100px] relative'>
 				<Image
 					src='/navbar.jpg'
 					alt='Breadcrumb background'
 					layout='fill'
 					objectFit='cover'
 				/>
-			</div>
+			</div> */}
+			<div className='w-full h-[1px] bg-customGreen'></div>
 		</div>
 	)
 }

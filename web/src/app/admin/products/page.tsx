@@ -6,8 +6,13 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function AdminViewAllProductsPage() {
+	// State hook to manage product data
 	const [products, setProducts] = useState<any>([])
 
+	/**
+	 * Function to handle deletion of a product by their id
+	 * @param pid - Product id
+	 */
 	const productDeleteHandler = async (pid: String) => {
 		try {
 			await axiosInstance.delete(`/admin/product/delete/${pid}`, {
@@ -23,6 +28,9 @@ export default function AdminViewAllProductsPage() {
 		}
 	}
 
+	/**
+	 * Fetch all product from the backend
+	 */
 	const fetchProducts = async () => {
 		try {
 			const response = await axiosInstance.get('/public/product/all')
@@ -35,6 +43,7 @@ export default function AdminViewAllProductsPage() {
 		}
 	}
 
+	// Calls the function to fetch products on load
 	useEffect(() => {
 		fetchProducts()
 	}, [])

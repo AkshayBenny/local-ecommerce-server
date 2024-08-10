@@ -5,21 +5,31 @@ import axios from 'axios'
 import { ChangeEvent, FormEvent, useState } from 'react'
 
 export default function CreateProductAdminPage() {
+	// state hooks to manage the different states
 	const [productName, setProductName] = useState<string>('')
 	const [productDesc, setProductDesc] = useState<string>('')
 	const [productPrice, setProductPrice] = useState<number>(0)
 	const [productCategory, setProductCategory] = useState<string>('')
 	const [productImage, setProductImage] = useState<File | null>()
 
+	/**
+	 * Function to handle file uploades
+	 * @param e - Change event from file input
+	 */
 	const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files && e.target.files.length > 0) {
 			setProductImage(e.target.files[0])
 		}
 	}
 
+	/**
+	 * Function to create a new product
+	 * @param e - Form submit event
+	 */
 	const createProductHandler = async (e: FormEvent) => {
 		e.preventDefault()
 
+		// Initialises a new form object
 		const formData = new FormData()
 
 		formData.append('productName', productName)
@@ -32,6 +42,7 @@ export default function CreateProductAdminPage() {
 		}
 
 		try {
+			// Post the form data to the backend
 			const response = await axiosInstance.post(
 				'/admin/product/new',
 				formData,
@@ -51,6 +62,7 @@ export default function CreateProductAdminPage() {
 				setProductImage(null)
 			}
 		} catch (error: any) {
+			// If error encountered, log it to the console
 			console.log(error.message)
 		}
 	}

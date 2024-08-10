@@ -12,9 +12,14 @@ import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 export default function CheckoutPage() {
+	// Router to manage navigation
 	const router = useRouter()
+
+	// Recoil global states to manage user and cart
 	const user = useRecoilValue(userState)
 	const [cart, setCart] = useRecoilState(cartState)
+
+	// Local state manage loading and form data
 	const [loading, setLoading] = useState<Boolean>(false)
 	const [formData, setFormData] = useState({
 		city: '',
@@ -24,33 +29,52 @@ export default function CheckoutPage() {
 		country: '',
 	})
 
+	/**
+	 * Function to handle input change and set the local form data state
+	 * @param e - Input change event
+	 */
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
 
+	/**
+	 * Function to handle checkout
+	 * @returns - Returns the created order
+	 */
 	const checkoutHandler = async () => {
 		try {
+			// Send a POST request to the backend to create a new order
 			const response = await axiosInstance.post('adminuser/order/create')
 			return response.data
 		} catch (error: any) {
 			console.log(error.message)
 		}
 	}
+
+	/**
+	 * A function to handle updating of a profile
+	 */
 	const updateProfileHandler = async () => {
 		try {
+			// Send a POST request to the backend along with the data in the body to update profile
 			await axiosInstance.post('/adminuser/set-profile', formData)
 		} catch (error: any) {
 			console.log(error?.message)
 		}
 	}
 
+	/**
+	 * Function to fetch the user profile
+	 */
 	const getUserProfileHandler = async () => {
 		try {
+			// Send GET request to the backend to fetch the profile data
 			const response = await axiosInstance.get(
 				'/adminuser/get-user-profile'
 			)
 			const data = response.data
+			// Update the form data based on the response
 			setFormData({
 				city: data?.city,
 				street: data?.street,
@@ -58,12 +82,15 @@ export default function CheckoutPage() {
 				postcode: data?.postcode,
 				country: data?.country,
 			})
-			// setOrders(data?.orders)
 		} catch (error: any) {
 			console.log(error?.message)
 		}
 	}
 
+	/**
+	 * Function to handle the submission of the form to update profile
+	 * @param e - Form submit event
+	 */
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		setLoading(true)
@@ -78,6 +105,7 @@ export default function CheckoutPage() {
 		}
 	}
 
+	// On component mount, fetch the user profile and cart
 	useEffect(() => {
 		;(async () => {
 			await getUserProfileHandler()
