@@ -82,6 +82,7 @@ public class CartService {
                 Cart userCart = cartRepo.findByUserId(user.getId());
                 if (userCart == null) {
                     userCart = new Cart(user);
+                    cartRepo.save(userCart);
                 }
 
                 Optional<Product> productOptional = productRepo.findById(productId);

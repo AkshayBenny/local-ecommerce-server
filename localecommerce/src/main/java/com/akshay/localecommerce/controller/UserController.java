@@ -105,6 +105,14 @@ public class UserController {
         return userManagementService.getUserProfile(email);
     }
 
+    @GetMapping("/adminuser/get-profile")
+    public ResponseEntity<ReqRes> getMyProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        ReqRes response = userManagementService.getMyInfo(email);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
     /**
      * Set the profile details of the user
      * 
