@@ -81,7 +81,7 @@ export default function StripePayment({
 					<button
 						className='px-12  bg-customGreen py-[14px] rounded-md text-white mt-4 w-fit'
 						disabled={!stripe || loading}>
-						{!loading ? `Pay ${amount}` : 'Processing...'}
+						{!loading ? `Pay £ ${amount}` : 'Processing...'}
 					</button>
 				</form>
 			</div>

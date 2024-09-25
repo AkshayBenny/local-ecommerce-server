@@ -51,8 +51,10 @@ export default function CartPage() {
 	// If the cart is empty display a message
 	if (cart && cart.length === 0)
 		return (
-			<div>
-				<p>Cart currently empty. </p>
+			<div className='flex flex-col items-center justify-center'>
+				<p className='text-[32px] text-[#1A1A1A] font-medium text-start mb-[32px]'>
+					Cart currently empty.{' '}
+				</p>
 				<Link href='/'>
 					<p className='text-blue-700 underline'>Add some products</p>
 				</Link>

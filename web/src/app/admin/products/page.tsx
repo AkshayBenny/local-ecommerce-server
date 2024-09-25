@@ -4,6 +4,8 @@ import axiosInstance from '@/utils/axiosInstance'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import EditBoxLineIcon from 'remixicon-react/EditBoxLineIcon'
+import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
 
 export default function AdminViewAllProductsPage() {
 	// State hook to manage product data
@@ -49,44 +51,49 @@ export default function AdminViewAllProductsPage() {
 	}, [])
 
 	return (
-		<div>
-			<h1>All products</h1>
-			<div className='flex flex-col gap-3'>
-				{products.length > 0 ? (
-					products.map((product: any) => {
-						return (
-							<div className='border border-black flex gap-3 justify-between'>
-								<Image
-									src={product?.image}
-									alt={`${product.name}`}
-									width={60}
-									height={60}
-								/>
-								<div className='flex flex-col gap-2'>
-									<p>{product.name}</p>
-									<p>{product.price}</p>
+		<main className='max-w-screen min-h-screen mb-12'>
+			<div className='lg:max-w-[60vw] lg:mx-auto lg:mt-12'>
+				<h1 className='text-[32px] text-[#1A1A1A] font-medium text-start mb-[32px]'>
+					All products
+				</h1>
+				<div className='flex flex-col gap-3'>
+					{products.length > 0 ? (
+						products.map((product: any) => {
+							return (
+								<div className='border-b border-opacity-10 pb-2 flex gap-3 justify-between'>
+									<div className='flex items-center justify-start gap-5'>
+										<Image
+											src={product?.image}
+											alt={`${product.name}`}
+											width={60}
+											height={60}
+											className='aspect-square'
+										/>
+										<div className='flex flex-col gap-2'>
+											<p>{product.name}</p>
+											<p>£ {product.price}</p>
+										</div>
+									</div>
+									<div className='flex items-center justify-center gap-4'>
+										<Link
+											href={`/admin/edit/${product.id}`}>
+											<EditBoxLineIcon className='text-white h-[32px] w-[32px] bg-customGreen p-2 rounded-md' />
+										</Link>
+										<button
+											onClick={() =>
+												productDeleteHandler(product.id)
+											}>
+											<DeleteBinLineIcon className='text-white h-[32px] w-[32px] bg-red-400 p-2 rounded-md' />
+										</button>
+									</div>
 								</div>
-								<div className='flex items-center justify-center '>
-									<Link
-										href={`/admin/edit/${product.id}`}
-										className='h-full bg-blue-600 text-white px-3 py-2'>
-										Edit
-									</Link>
-									<button
-										onClick={() =>
-											productDeleteHandler(product.id)
-										}
-										className='h-full bg-red-600 text-white px-3 py-2'>
-										Delete
-									</button>
-								</div>
-							</div>
-						)
-					})
-				) : (
-					<div>No products</div>
-				)}
+							)
+						})
+					) : (
+						<div>No products</div>
+					)}
+				</div>
 			</div>
-		</div>
+		</main>
 	)
 }

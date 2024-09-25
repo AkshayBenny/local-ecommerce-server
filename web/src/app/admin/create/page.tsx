@@ -68,31 +68,36 @@ export default function CreateProductAdminPage() {
 	}
 	return (
 		<main className='flex flex-col items-center justify-center h-full gap-12'>
-			<h2 className='text-xl'>Create a new product</h2>
 			<form
 				onSubmit={createProductHandler}
 				className='flex flex-col items-center justify-center gap-4 border w-fit px-12 py-6'>
-				<h3>Create a new product</h3>
-				<div>
-					<p>Enter product name</p>
+				<h3 className='font-semibold text-[32px] leading-[120%] opacity-90'>
+					Create a new product
+				</h3>
+				<div className='w-full'>
+					<p className='text-[14px] font-regular'>
+						Enter product name
+					</p>
 					<input
 						type='text'
 						placeholder='Enter name'
 						value={productName}
 						onChange={(e) => setProductName(e.target.value)}
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-md w-full'
 					/>
 				</div>
-				<div>
-					<p>Enter product description</p>
+				<div className='w-full'>
+					<p className='text-[14px] font-regular'>
+						Enter product description
+					</p>
 					<textarea
 						value={productDesc}
 						placeholder='Description'
-						onChange={(e) =>
-							setProductDesc(e.target.value)
-						}></textarea>
+						onChange={(e) => setProductDesc(e.target.value)}
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-md w-full'></textarea>
 				</div>
-				<div>
-					<p>Price</p>
+				<div className='w-full'>
+					<p className='text-[14px] font-regular'>Price</p>
 					<input
 						type='number'
 						placeholder='Enter price'
@@ -100,27 +105,30 @@ export default function CreateProductAdminPage() {
 						onChange={(e) =>
 							setProductPrice(Number(e.target.value))
 						}
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-md w-full'
 					/>
 				</div>
-				<div>
-					<p>Category</p>
+				<div className='w-full'>
+					<p className='text-[14px] font-regular'>Category</p>
 					<input
 						type='text'
 						placeholder='Product category'
 						value={productCategory}
 						onChange={(e) => setProductCategory(e.target.value)}
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-md w-full'
 					/>
 				</div>
-				<div>
-					<p>Product image</p>
+				<div w-full>
+					<p className='text-[14px] font-regular'>Product image</p>
 					<input
 						type='file'
 						onChange={handleFileUpload}
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-md w-full'
 					/>
 				</div>
 				<button
 					type='submit'
-					className='bg-black text-white px-4 py-2'>
+					className='w-full bg-customGreen py-[14px] rounded-md text-white'>
 					Create
 				</button>
 			</form>

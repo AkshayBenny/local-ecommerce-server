@@ -42,7 +42,7 @@ export default function PaymentPage() {
 				amount: convertToSubCurrency(amount),
 				currency: 'gbp',
 			}}>
-			payment
+			
 			<StripePayment
 				orderId={params.orderId}
 				amount={amount}

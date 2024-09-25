@@ -81,7 +81,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				router.push('/')
 			}
 			await fetchCart(setCart)
-			console.log(response.data)
 		} catch (error: any) {
 			console.error('Login failed:', error.response?.data)
 			alert('Something went wrong!')
@@ -103,6 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		try {
 			const response = await axiosInstance.get('/adminuser/get-profile')
 			setUser(response?.data?.users)
+			console.log('Profile response:::', response.data)
 			return response.data?.users?.role
 		} catch (error: any) {
 			console.error('Fetching user profile failed:', error.response?.data)

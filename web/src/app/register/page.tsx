@@ -17,12 +17,14 @@ export default function RegisterPage() {
 		city: '',
 	})
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
 		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
 
-	const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+	const registerHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		await register(formData)
 	}
@@ -30,7 +32,7 @@ export default function RegisterPage() {
 	return (
 		<main className='flex items-center justify-center min-h-[85vh] w-full'>
 			<form
-				onSubmit={loginHandler}
+				onSubmit={registerHandler}
 				className='flex flex-col items-center justify-center h-full gap-[20px] border border-customVeryLightBlack lg:p-[24px] rounded-md'>
 				<h1 className='font-semibold text-[32px] leading-[120%] opacity-90'>
 					Register
@@ -63,15 +65,20 @@ export default function RegisterPage() {
 						required
 						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-full'
 					/>
-					<input
-						type='role'
-						placeholder='Your Role'
+					<select
 						name='role'
 						value={formData.role}
 						onChange={handleInputChange}
 						required
-						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-full'
-					/>
+						className='border border-[#E6E6E6] px-[16px] py-[14px] rounded-full'>
+						<option
+							value=''
+							disabled>
+							Select Your Role
+						</option>
+						<option value='USER'>Customer</option>
+						<option value='ADMIN'>Shop Owner</option>
+					</select>
 					<input
 						type='text'
 						placeholder='Your City'

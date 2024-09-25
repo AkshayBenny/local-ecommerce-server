@@ -3,6 +3,8 @@ package com.akshay.localecommerce.config;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import com.akshay.localecommerce.model.ChatMessage;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

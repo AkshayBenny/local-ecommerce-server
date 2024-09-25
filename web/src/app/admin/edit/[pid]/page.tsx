@@ -101,52 +101,54 @@ export default function AdminEditProductPage() {
 		)
 	}
 	return (
-		<div>
-			<form
-				onSubmit={productUpdateHandler}
-				className='flex flex-col items-center justify-center gap-3'>
-				<input
-					name='name'
-					onChange={handleInputChange}
-					type='text'
-					value={product?.name || ''}
-					placeholder='Product name'
-				/>
-				<textarea
-					name='description'
-					onChange={handleInputChange}
-					value={product?.description || ''}
-					placeholder='Product description'
-				/>
-				<input
-					name='price'
-					onChange={handleInputChange}
-					type='number'
-					value={product?.price || ''}
-					placeholder='Product price'
-				/>
-				<input
-					name='category'
-					onChange={handleInputChange}
-					type='text'
-					value={product?.category || ''}
-					placeholder='Product category'
-				/>
-				{product.image && typeof product.image === 'string' && (
-					<Image
-						src={product.image}
-						alt={product.name}
-						width={100}
-						height={100}
+		<main className='max-w-screen min-h-screen mb-12'>
+			<div className='lg:max-w-[60vw] lg:mx-auto lg:mt-12'>
+				<form
+					onSubmit={productUpdateHandler}
+					className='flex flex-col items-center justify-center gap-3'>
+					<input
+						name='name'
+						onChange={handleInputChange}
+						type='text'
+						value={product?.name || ''}
+						placeholder='Product name'
 					/>
-				)}
-				<input
-					type='file'
-					placeholder='New image'
-					onChange={handleFileUpload}
-				/>
-				<button type='submit'>Update</button>
-			</form>
-		</div>
+					<textarea
+						name='description'
+						onChange={handleInputChange}
+						value={product?.description || ''}
+						placeholder='Product description'
+					/>
+					<input
+						name='price'
+						onChange={handleInputChange}
+						type='number'
+						value={product?.price || ''}
+						placeholder='Product price'
+					/>
+					<input
+						name='category'
+						onChange={handleInputChange}
+						type='text'
+						value={product?.category || ''}
+						placeholder='Product category'
+					/>
+					{product.image && typeof product.image === 'string' && (
+						<Image
+							src={product.image}
+							alt={product.name}
+							width={100}
+							height={100}
+						/>
+					)}
+					<input
+						type='file'
+						placeholder='New image'
+						onChange={handleFileUpload}
+					/>
+					<button type='submit'>Update</button>
+				</form>
+			</div>
+		</main>
 	)
 }
