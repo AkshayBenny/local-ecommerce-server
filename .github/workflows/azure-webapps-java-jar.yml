@@ -1,9 +1,9 @@
 name: Build and deploy JAR app to Azure Web App
 
 env:
-    AZURE_WEBAPP_NAME: localshopper # set this to the name of your Azure Web App
-    JAVA_VERSION: '17' # set this to the Java version to use
-    DISTRIBUTION: temurin # set this to the Java distribution
+    AZURE_WEBAPP_NAME: localshopper
+    JAVA_VERSION: '17'
+    DISTRIBUTION: temurin
 
 on:
     push:
@@ -20,6 +20,18 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Set environment variables
+              run: |
+                  echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+                  echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+                  echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+                  echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+                  echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+                  echo "AWS_ENDPOINT_URL=${{ secrets.AWS_ENDPOINT_URL }}" >> $GITHUB_ENV
+                  echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+                  echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> $GITHUB_ENV
+                  echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> $GITHUB_ENV
+
             - name: Set up Java version
               uses: actions/setup-java@v4
               with:
@@ -28,15 +40,13 @@ jobs:
                   cache: 'maven'
 
             - name: Build with Maven
-              run: |
-                  cd localecommerce  # Navigate to the correct directory
-                  mvn clean install
+              run: mvn clean package -DskipTests
 
             - name: Upload artifact for deployment job
               uses: actions/upload-artifact@v4
               with:
                   name: localshopper
-                  path: 'localecommerce/target/*.jar'
+                  path: localecommerce/target/*.jar
 
     deploy:
         permissions:
