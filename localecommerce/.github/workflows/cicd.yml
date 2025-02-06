@@ -1,182 +1,40 @@
-# name: CI/CD Pipeline for Spring Boot on Azure
-
-# on:
-#     push:
-#         branches:
-#             - main
-#             - master
-#     pull_request:
-#         branches:
-#             - main
-
-# jobs:
-#     build:
-#         runs-on: ubuntu-latest
-
-#         steps:
-#             - name: Checkout Code
-#               uses: actions/checkout@v4
-
-#             - name: Set up JDK 17
-#               uses: actions/setup-java@v3
-#               with:
-#                   distribution: 'temurin'
-#                   java-version: '17'
-
-#             # - name: Cache Maven dependencies
-#             #   uses: actions/cache@v3
-#             #   with:
-#             #     path: ~/.m2
-#             #     key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
-#             #     restore-keys: |
-#             #       maven-${{ runner.os }}
-
-#             - name: Build with Maven
-#               run: mvn clean install -DskipTests
-
-#             - name: Upload Artifact
-#               uses: actions/upload-artifact@v3
-#               with:
-#                   name: spring-boot-app
-#                   path: ${{ github.workspace }}/target/*.jar
-
-#     deploy:
-#         runs-on: ubuntu-latest
-#         needs: build
-
-#         steps:
-#             - name: Checkout Code
-#               uses: actions/checkout@v4
-
-#             - name: Download Artifact
-#               uses: actions/download-artifact@v3
-#               with:
-#                   name: spring-boot-app
-#                   # path: target/
-
-#             - name: Deploy to Azure Web App
-#               uses: azure/webapps-deploy@v2
-#               with:
-#                   app-name: localshopper
-#                   publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-#                   package: '*.jar'
-
-# ----------------------------------------------------------
-# name: CI/CD Pipeline for Spring Boot on Azure
-
-# on:
-#     push:
-#         branches:
-#             - main
-#             - master
-#     pull_request:
-#         branches:
-#             - main
-
-# jobs:
-#     build:
-#         runs-on: ubuntu-latest
-
-#         steps:
-#             - name: Checkout Code
-#               uses: actions/checkout@v4
-
-#             - name: Set up JDK 17
-#               uses: actions/setup-java@v3
-#               with:
-#                   distribution: 'temurin'
-#                   java-version: '17'
-
-#             - name: Cache Maven dependencies
-#               uses: actions/cache@v3
-#               with:
-#                 path: ~/.m2
-#                 key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
-#                 restore-keys: |
-#                   maven-${{ runner.os }}
-
-#             - name: Build with Maven
-#               run: mvn clean install -DskipTests
-
-#             - name: Upload Artifact
-#               uses: actions/upload-artifact@v3
-#               with:
-#                   name: spring-boot-app
-#                   path: target/*.jar
-
-#     deploy:
-#         runs-on: ubuntu-latest
-#         needs: build
-
-#         steps:
-#             - name: Download Artifact
-#               uses: actions/download-artifact@v3
-#               with:
-#                   name: spring-boot-app
-
-#             - name: Deploy to Azure Web App
-#               uses: azure/webapps-deploy@v2
-#               with:
-#                   app-name: localshopper
-#                   publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-#                   package: spring-boot-app/*.jar
-# ----------------------------------------------------------------
-
-name: Build and Deploy Spring Boot App to Azure
-
-env:
-    AZURE_WEBAPP_NAME: ${{ secrets.AZURE_WEBAPP_NAME }} # Set this in GitHub Secrets
-    JAVA_VERSION: '17' # Using Java 17
-    DISTRIBUTION: temurin # Recommended Java distribution
+name: Deploy App to Azure App Service
 
 on:
     push:
-        branches: ['main', 'master']
-    workflow_dispatch:
-
-permissions:
-    contents: read
+        branches:
+            - main
+            - master
 
 jobs:
     build:
         runs-on: ubuntu-latest
-
         steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
-
-            - name: Set up Java
-              uses: actions/setup-java@v4
+            - name: Checkout Source
+              uses: actions/checkout@v3
+            - name: Setup Java
+              uses: actions/setup-java@v3
               with:
-                  java-version: ${{ env.JAVA_VERSION }}
-                  distribution: ${{ env.DISTRIBUTION }}
-                  cache: 'maven'
-
-            - name: Build with Maven
+                  distribution: 'temurin'
+                  java-version: '17'
+            - name: Build Project
               run: mvn clean install -DskipTests
-
-            - name: Upload Artifact
-              uses: actions/upload-artifact@v4
+            - name: Upload Artifacct for deployment job
+              uses: actions/upload-artifact@v2
               with:
-                  name: spring-boot-app
-                  path: target/*.jar
-
+                  name: localshopper
+                  path: ${{ github.workspace }}/target/*.jar
     deploy:
         runs-on: ubuntu-latest
         needs: build
-        permissions:
-            contents: none
-
         steps:
-            - name: Download Artifact
-              uses: actions/download-artifact@v4
+            - name: Download Artifact from build job
+              uses: actions/download-artifact@v2
               with:
-                  name: spring-boot-app
-
-            - name: Deploy to Azure Web App
-              id: deploy-to-webapp
+                  name: localshopper
+            - name: Deploy to Azure App Service
               uses: azure/webapps-deploy@v2
               with:
                   app-name: localshopper
-                  publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+                  publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
                   package: '*.jar'
