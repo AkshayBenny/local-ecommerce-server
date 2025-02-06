@@ -22,15 +22,15 @@ jobs:
 
             - name: Set environment variables
               run: |
-                  echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-                  echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-                  echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
-                  echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-                  echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-                  echo "AWS_ENDPOINT_URL=${{ secrets.AWS_ENDPOINT_URL }}" >> $GITHUB_ENV
-                  echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> $GITHUB_ENV
-                  echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> $GITHUB_ENV
-                  echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> $GITHUB_ENV
+                echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+                echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+                echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+                echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+                echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+                echo "AWS_ENDPOINT_URL=${{ secrets.AWS_ENDPOINT_URL }}" >> $GITHUB_ENV
+                echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+                echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> $GITHUB_ENV
+                echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> $GITHUB_ENV
 
             - name: Set up Java version
               uses: actions/setup-java@v4
@@ -41,6 +41,7 @@ jobs:
 
             - name: Build with Maven
               run: mvn clean package -DskipTests
+              working-directory: localecommerce  # Run inside the correct directory
 
             - name: Upload artifact for deployment job
               uses: actions/upload-artifact@v4
